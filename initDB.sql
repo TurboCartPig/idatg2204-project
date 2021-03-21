@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS db_project.order(
     order_state VARCHAR(50) REFERENCES order_state(state)
 );
 
-CREATE TABLE IF NOT EXISTS db_project.skiis_in_order(
+CREATE TABLE IF NOT EXISTS db_project.sub_order(
     order_number INT NOT NULL REFERENCES `order`(order_number),
     ski_id INT NOT NULL REFERENCES ski(ski_id),
     quantity INT NOT NULL,
