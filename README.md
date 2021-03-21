@@ -9,4 +9,4 @@
 ### Milestone 2
 
 * Conceptual, Logical and Physical model are updated according to feedback. 
-*  
+* The test specs are located in their respective folder in the wiki, under `Tests/API tests` and `Tests/Unit tests`. 
