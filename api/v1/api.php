@@ -14,7 +14,7 @@ if (!isset($queries['request'])) {
     return;
 }
 
-$uri = explode( '/', $queries['request']);
+$uri = explode('/', $queries['request']);
 unset($queries['request']);
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];
@@ -34,14 +34,14 @@ try {
     //$controller->authorise($token, RESTConstants::API_URI . '/');
     $res = $controller->handleRequest($uri, RESTConstants::API_URI, $requestMethod, $queries, $payload);
     http_response_code($res['status']);
-    if (isset($res['result']))  {
+    if (isset($res['result'])) {
         echo json_encode($res['result']);
     }
 // Handle application exceptions
-} catch (APIException $e){
+} catch (APIException $e) {
     http_response_code($e->getCode());
     echo json_encode(generateErrorResponseContent($e->getCode(), $e->getInstance(), $e->getDetailCode(), $e));
-} catch (BadRequestException $e){
+} catch (BadRequestException $e) {
     $resp = generateDBErrorResponseContent($e->getCode(), $e->getInstance(), $e->getDetailCode());
     http_response_code($resp['error_code']);
     echo json_encode($resp);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class APIException an exception class thrown whenever the request could not be successfully handled by the API.
  */
@@ -21,7 +22,8 @@ class APIException extends Exception
         $this->detailCode = $detailCode;
     }
 
-    public function getInstance() {
+    public function getInstance()
+    {
         return $this->instance;
     }
 

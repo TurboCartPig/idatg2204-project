@@ -6,7 +6,8 @@ require_once 'controller/BadRequestException.php';
 /**
  * Class DealerModel class for accessing dealer data in database.
  */
-class CustomersModel extends AbstractModel {
+class CustomersModel extends AbstractModel
+{
     public function __construct()
     {
         parent::__construct();
@@ -42,7 +43,8 @@ class CustomersModel extends AbstractModel {
         }
         return $res;
     }
-        /**
+
+    /**
      * Returns the collection of resources from the database.
      * @param array|null $filter
      * @return array an array of associative arrays of resource attributes. The

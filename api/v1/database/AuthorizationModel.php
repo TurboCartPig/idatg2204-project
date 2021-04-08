@@ -16,7 +16,8 @@ class AuthorizationModel extends Database
      * @param string $token
      * @return bool indicating whether the token was successfully verified
      */
-    public function isValid(string $token): bool {
+    public function isValid(string $token): bool
+    {
         $query = 'SELECT COUNT(*) FROM auth_token WHERE token = :token';
 
         $stmt = $this->db->prepare($query);

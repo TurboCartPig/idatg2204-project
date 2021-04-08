@@ -52,7 +52,8 @@ $ERROR_MESSAGES[RESTConstants::DB_ERR_ATTRIBUTE_MISSING]['detail'] = 'Attribute(
  * @return array an array of the form array("error-code": nn, "title": "...", "detail": "...", "instance": "...")
  * @global array ERROR_MESSAGES
  */
-function generateErrorResponseContent(int $error_code, string $instance, int $detailCode = -1, Throwable $e = null): array {
+function generateErrorResponseContent(int $error_code, string $instance, int $detailCode = -1, Throwable $e = null): array
+{
     $res = array();
     global $ERROR_MESSAGES;
 

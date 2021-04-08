@@ -74,7 +74,7 @@ abstract class ResourceController extends RequestHandler
                 case RESTConstants::METHOD_GET:
                     $res['result'] = $this->doRetrieveCollection($queries);
                     if (count($res['result']) > 0) {
-                        $res['status'] =  RESTConstants::HTTP_OK;
+                        $res['status'] = RESTConstants::HTTP_OK;
                     } else {
                         throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath);
                     }
@@ -114,7 +114,7 @@ abstract class ResourceController extends RequestHandler
                 case RESTConstants::METHOD_GET:
                     $res['result'] = $this->doRetrieveResource($id);
                     if ($res['result']) {
-                        $res['status'] =  RESTConstants::HTTP_OK;
+                        $res['status'] = RESTConstants::HTTP_OK;
                     } else {
                         throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath);
                     }
@@ -142,6 +142,7 @@ abstract class ResourceController extends RequestHandler
      * @see handleCollectionRequest
      */
     protected abstract function doRetrieveCollection(array $queries): array;
+
     /**
      * The function handling the resource creation requests.
      * @param array $payload the resource attributes sent from the client

@@ -1,4 +1,4 @@
 actor: ApiTester
 modules:
-    enabled:
-        - \Helper\Api
+  enabled:
+    - \Helper\Api

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class RequestHandler is the main root class for endpoint handlers
  */

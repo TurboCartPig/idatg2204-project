@@ -3,6 +3,7 @@ require_once 'RESTConstants.php';
 require_once 'controller/ResourceController.php';
 require_once 'ErrorHandler.php';
 require_once 'database/CustomerRepModel.php';
+
 /**
  * Class DealersEndpoint implementing the dealers endpoint controller.
  */
@@ -54,7 +55,7 @@ class CustomerRepEndpoint extends ResourceController
         }
         return $this->customerModel->getCustomerSummary($filter);
     }
-    
+
     /**
      * @param int $id
      * @return array|null

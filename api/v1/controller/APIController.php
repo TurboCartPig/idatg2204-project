@@ -37,7 +37,8 @@ class APIController extends RequestHandler
      * @param string $endpointPath the request endpoint
      * @throws APIException with the code set to HTTP_FORBIDDEN if the token is not valid
      */
-    public function authorise(string $token, string $endpointPath) {
+    public function authorise(string $token, string $endpointPath)
+    {
         if (!(new AuthorizationModel())->isValid($token)) {
             throw new APIException(RESTConstants::HTTP_FORBIDDEN, $endpointPath);
         }
@@ -70,21 +71,21 @@ class APIController extends RequestHandler
             throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath);
         }
         $endpointPath .= '/' . $uri[0];
-        switch ($endpointUri)  {
+        switch ($endpointUri) {
             case RESTConstants::ENDPOINT_CUSTOMERS:
-                $endpoint  = new CustomersEndpoint();
+                $endpoint = new CustomersEndpoint();
                 break;
             case RESTConstants::ENDPOINT_CUSTOMER_REP:
-                $endpoint  = new CustomerRepEndpoint();
+                $endpoint = new CustomerRepEndpoint();
                 break;
             case RESTConstants::ENDPOINT_TRANSPORTERS:
-                $endpoint  = new TransportersEndpoint();
+                $endpoint = new TransportersEndpoint();
                 break;
             case RESTConstants::ENDPOINT_PUBLIC:
-                $endpoint  = new CustomersEndpoint();
+                $endpoint = new CustomersEndpoint();
                 break;
             case RESTConstants::ENDPOINT_REPORT:
-                $endpoint  = new ReportController();
+                $endpoint = new ReportController();
                 break;
         }
         return $endpoint->handleRequest(array_slice($uri, 1), $endpointPath, $requestMethod,
