@@ -52,7 +52,6 @@ class CustomersEndpoint extends ResourceController
         if (isset($queries['customers'])) {
             $filter = array();
             $filter['customers'] = preg_split('/[,][\s]*/', $queries['customers']);
-            return $this->customerModel->getCustomerSummary($filter);
         }
         return $this->customerModel->getCollection($filter);
 
