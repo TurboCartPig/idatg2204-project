@@ -20,11 +20,16 @@ $container->set('PDO',function () {
 });
 
 $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Response $response, array $args) use (&$db) {
+    $employeeID = $args['employee_id'];
+
     $db = $this->get('PDO');
     $dbInstance = $db->getDB();
     $res = array();
-    $query = "SELECT * FROM customer";
-    $stmt = $dbInstance->query($query);
+    $query = "SELECT * FROM orders
+                INNER JOIN customer ON id = customer_id
+                WHERE customer_id = :cid";
+    $stmt = $dbInstance->prepare($query);
+    $stmt->bindValue(":cid",)
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $res[] = $row;
     }
