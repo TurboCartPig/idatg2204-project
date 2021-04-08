@@ -24,6 +24,7 @@ $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Resp
 
     $db = $this->get('PDO');
     $dbInstance = $db->getDB();
+
     $res = array();
     $query = "SELECT * FROM orders 
                 INNER JOIN employee ON employee.number = orders.customer_rep
@@ -34,12 +35,32 @@ $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Resp
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $res[] = $row;
     }
+
     $response->getBody()->write(json_encode($res));
     return $response;
 });
 
-$app->get('/customer_rep/{employee_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
-    //TODO: Implement this endpoint
+$app->put('/customer_rep/{employee_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
+    $employeeID = $args['employee_id'];
+    $order_number = $args['order_number'];
+
+    $db = $this->get('PDO');
+    $dbInstance = $db->getDB();
+
+    $res = array();
+    $query = "SELECT * FROM orders 
+                INNER JOIN employee ON employee.number = orders.customer_rep
+                WHERE employee.number = :eid";
+    $stmt = $dbInstance->prepare($query);
+    $stmt->bindValue(":eid",$employeeID);
+    $stmt->execute();
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $res[] = $row;
+    }
+
+    $response->getBody()->write(json_encode($res));
+    return $response;
+
 });
 
 $app->put('/customer_rep/{employee_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
