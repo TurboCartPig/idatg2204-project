@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="db_project" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="db_project">
+        <serverdata>
+          <mappings>
+            <mapping deploy="api" local="$PROJECT_DIR$/api" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
