@@ -1,5 +1,4 @@
-.idea/db-project.iml
-.idea/php.xml
+.idea/*
 .vscode/*
 vendor/*
 src/database/dbCredentials.php
