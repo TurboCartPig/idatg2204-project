@@ -52,11 +52,12 @@ CREATE TABLE IF NOT EXISTS db_project.order_state(
 CREATE TABLE IF NOT EXISTS db_project.order(
     order_number INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     parent_number INT REFERENCES `order`(order_number),
+    customer_id INT REFERENCES `customer`(customer_id)
     total_price INT NOT NULL,
     order_state VARCHAR(50) REFERENCES order_state(state)
 );
 
-CREATE TABLE IF NOT EXISTS db_project.skiis_in_order(
+CREATE TABLE IF NOT EXISTS db_project.sub_order(
     order_number INT NOT NULL REFERENCES `order`(order_number),
     ski_id INT NOT NULL REFERENCES ski(ski_id),
     quantity INT NOT NULL,
