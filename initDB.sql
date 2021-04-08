@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS db_project.ski(
     temp_class VARCHAR(10) NOT NULL REFERENCES temperature(temp),
     grip VARCHAR(50) NOT NULL REFERENCES grip_system(grip),
     description VARCHAR(500),
-    historical BOOL,
+    historical BOOLEAN,
     photo LONGBLOB,
     msrp INT NOT NULL,
     type INT NOT NULL REFERENCES ski_type(type_id),
@@ -52,12 +52,12 @@ CREATE TABLE IF NOT EXISTS db_project.order_state(
 CREATE TABLE IF NOT EXISTS db_project.order(
     order_number INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     parent_number INT REFERENCES `order`(order_number),
-    customer_id INT REFERENCES `customer`(customer_id)
+	customer_id INT REFERENCES `customer`(id),
     total_price INT NOT NULL,
     order_state VARCHAR(50) REFERENCES order_state(state)
 );
 
-CREATE TABLE IF NOT EXISTS db_project.sub_order(
+CREATE TABLE IF NOT EXISTS db_project.skiis_in_order(
     order_number INT NOT NULL REFERENCES `order`(order_number),
     ski_id INT NOT NULL REFERENCES ski(ski_id),
     quantity INT NOT NULL,
@@ -140,3 +140,38 @@ CREATE TABLE IF NOT EXISTS  db_project.production_plan(
   manager INT NOT NULL REFERENCES employee(number),
   PRIMARY KEY (num_of_skies,ski_type)
 );
+
+INSERT INTO `customer` (`id`, `start_date`, `end_date`, `customer_rep`) VALUES
+(1, '2020-01-01', '2021-01-01', 2),
+(2, '1990-01-01', '1995-01-01', 3),
+(3, '2002-01-01', '2005-01-01', 4),
+(4, '2006-01-01', '2010-01-01', 4);
+
+
+INSERT INTO `employee` (`number`, `name`, `role`) VALUES
+(1, 'Gunnar', 1);
+
+INSERT INTO `employee_role` (`id`, `role`) VALUES
+(1, 'manager');
+
+INSERT INTO `order` (`order_number`, `parent_number`, `customer_id`, `total_price`, `order_state`) VALUES
+(1, 2, 1, 120000, 'In production'),
+(2, 2, 1, 234000, 'Ready for shipping'),
+(3, 1, 2, 320000, 'In production'),
+(4, 1, 2, 120000, 'Ready for shipping'),
+(5, 3, 3, 410000, 'In production'),
+(6, 3, 3, 120000, 'Ready for shipping'),
+(7, 4, 4, 210000, 'In production'),
+(8, 4, 4, 110000, 'Ready for shipping');
+
+INSERT INTO `order_state` (`state`) VALUES
+('In production'),
+('Ready for shipping');
+
+INSERT INTO `production_plan` (`num_of_skies`, `ski_type`, `manager`) VALUES
+(200, 2, 1),
+(500, 1, 1);
+
+INSERT INTO `ski_type` (`type_id`, `name`) VALUES
+(1, 'classic'),
+(2, 'sprint');
