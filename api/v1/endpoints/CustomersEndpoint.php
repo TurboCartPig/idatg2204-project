@@ -48,11 +48,6 @@ class CustomersEndpoint extends ResourceController
             
         }
         return (new CustomersModel())->getCollection($filter);
-        //if (isset($queries['summary'])) {
-        //    $filter = array();
-        //    $filter['summary'] = preg_split('/[,][\s]*/', $queries['summary']);
-        //    return (new CustomersModel())->getCollection($filter);
-        //}
         
     }
 
