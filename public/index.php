@@ -9,6 +9,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require_once '../src/database/Database.php';
 require_once '../src/database/dbCredentials.php';
 
+header('Content-Type: application/json');
 $container = new Container();
 
 AppFactory::setContainer($container);
@@ -27,7 +28,7 @@ $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Resp
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $res[] = $row;
     }
-    print_r($res);
+    $response->getBody()->write(json_encode($res));
     return $response;
 });
 
