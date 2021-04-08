@@ -1,8 +1,8 @@
 <?php
 
+use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use DI\Container;
 use Slim\Factory\AppFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -15,7 +15,7 @@ $container = new Container();
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 
-$container->set('PDO',function () {
+$container->set('PDO', function () {
     return new Database();
 });
 
@@ -30,7 +30,7 @@ $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Resp
                 INNER JOIN employee ON employee.number = orders.customer_rep
                 WHERE employee.number = :eid";
     $stmt = $dbInstance->prepare($query);
-    $stmt->bindValue(":eid",$employeeID);
+    $stmt->bindValue(":eid", $employeeID);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $res[] = $row;
@@ -60,7 +60,7 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}', function (Request
     }
 
     // If there is not exactly ONE order matched by the above statement, then something is wrong.
-    if (count($row) != 1) {
+    if (count($res) != 1) {
         $response->getBody()->write("The order is either not associated with this employee or it does not exits");
         $response->withStatus(400);
         return $response;
