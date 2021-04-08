@@ -3,6 +3,11 @@
 
 class Database
 {
+    /**
+     * @var PDO
+     */
+    private $db;
+
     public function __construct()
     {
         $this->db = new  PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8',
