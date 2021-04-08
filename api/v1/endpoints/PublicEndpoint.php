@@ -10,6 +10,11 @@ require_once 'database/PublicModel.php';
 class PublicEndpoint extends ResourceController
 {
     /**
+     * @var CustomersModel
+     */
+    private $customerModel;
+
+    /**
      * DealersEndpoint constructor. It specifies which sub resource requests are allowed It also defines which functions
      * are implemented on the collection and the resource.
      * @see RequestHandler::$validRequests
@@ -32,6 +37,8 @@ class PublicEndpoint extends ResourceController
         // Valid resource method calls vs implementation status
         $this->validMethods[RESTConstants::CUSTOMER_ID] = array();
         $this->validMethods[RESTConstants::CUSTOMER_ID][RESTConstants::METHOD_GET] = RESTConstants::HTTP_OK;
+
+        $this->customerModel = new CustomersModel();
     }
 
     /**
@@ -46,7 +53,7 @@ class PublicEndpoint extends ResourceController
             $filter = array();
             $filter['customers'] = preg_split('/[,][\s]*/', $queries['customers']);
         }
-        return (new CustomersModel())->getCustomerSummary($filter);
+        return $this->customerModel->getCustomerSummary($filter);
     }
 
     /**
@@ -57,7 +64,7 @@ class PublicEndpoint extends ResourceController
      */
     protected function doRetrieveResource(int $id): ?array
     {
-        return (new CustomersModel())->getOneCustomer($id);
+        return $this->customerModel->getOneCustomer($id);
     }
 
     /**
@@ -68,7 +75,7 @@ class PublicEndpoint extends ResourceController
      */
     protected function doCreateResource(array $payload): array
     {
-        return (new CustomersModel())->createCustomer($payload);
+        return $this->customerModel->createCustomer($payload);
     }
 
     /**
@@ -77,7 +84,7 @@ class PublicEndpoint extends ResourceController
      */
     protected function doUpdateResource(array $payload)
     {
-        (new CustomersModel())->updateResource($payload);
+        $this->customerModel->updateResource($payload);
     }
 
     /**
@@ -86,6 +93,6 @@ class PublicEndpoint extends ResourceController
      */
     protected function doDeleteResource(int $id)
     {
-        (new CustomersModel())->deleteResource($id);
+        $this->customerModel->deleteResource($id);
     }
 }
