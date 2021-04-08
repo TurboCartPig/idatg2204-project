@@ -54,7 +54,7 @@ class CustomersEndpoint extends ResourceController
             $filter['customers'] = preg_split('/[,][\s]*/', $queries['customers']);
             return $this->customerModel->getCustomerSummary($filter);
         }
-        return this->customerModel->getCollection($filter);
+        return $this->customerModel->getCollection($filter);
 
     }
 
