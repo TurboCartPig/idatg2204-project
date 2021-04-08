@@ -88,6 +88,24 @@ $app->get('/customer_rep/{employee_id}/shipments', function (Request $request, R
 
 $app->get('/customers/{customer_id}/orders', function (Request $request, Response $response, array $args) {
     //TODO: Implement this endpoint
+    $customerID = $args['customer_id'];
+
+    $db = $this->get('PDO');
+    $dbInstance = $db->getDB();
+
+    $res = array();
+    $query = "SELECT * FROM orders 
+                INNER JOIN customer ON customer.id = orders.customer_id
+                WHERE :eid = orders.customer_id";
+    $stmt = $dbInstance->prepare($query);
+    $stmt->bindValue(":eid",$customerID);
+    $stmt->execute();
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $res[] = $row;
+    }
+
+    $response->getBody()->write(json_encode($res));
+    return $response;
 });
 
 $app->post('/customers/{customer_id}/orders', function (Request $request, Response $response, array $args) {
