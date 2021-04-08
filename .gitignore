@@ -2,3 +2,4 @@
 .idea/php.xml
 .vscode/*
 vendor/*
+src/database/dbCredentials.php
