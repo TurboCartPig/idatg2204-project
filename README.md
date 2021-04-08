@@ -1,4 +1,29 @@
-## db-project
+# Project for IDATG2204
+
+# Setup
+
+This is a composer based project, so you need to have composer installed. You can find it [here](https://getcomposer.org).
+
+Then you can run the following command to install all dependencies:
+```bash
+composer install
+```
+
+Run the development server on `localhost:8080` with:
+```bash
+composer start
+```
+
+You can also run tests with the following command:
+```bash
+composer test
+```
+
+# Deployment
+
+> TODO
+
+# Milestones:
 
 ### Milestone 1
 
