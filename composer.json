@@ -1,0 +1,21 @@
+{
+  "name": "bprog/project",
+  "description": "Project for IDATG2204",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Dennis Kristiansen",
+      "email": "denniskr@stud.ntnu.no"
+    }
+  ],
+  "require": {
+    "php": "^8.0",
+    "ext-json": "*",
+    "slim/psr7": "^1.3",
+    "slim/slim": "^4.7"
+  },
+  "scripts": {
+    "start": "php -S localhost:8080 -t public"
+  }
+}
