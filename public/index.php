@@ -63,7 +63,7 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}', function (Request
 
 });
 
-$app->put('/customer_rep/{employee_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
+$app->get('/customer_rep/{employee_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
     //TODO: Implement this endpoint
 });
 
@@ -75,8 +75,31 @@ $app->get('/customers/{customer_id}/orders', function (Request $request, Respons
     //TODO: Implement this endpoint
 });
 
-$app->post('/customers/{customer_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
-    //TODO: Implement this endpoint
+$app->post('/customers/{customer_id}/orders', function (Request $request, Response $response, array $args) {
+    $params = $request->getParsedBody();
+    $response->getBody()->write(json_encode($params));
+
+    $customer_id = $args['customer_id'];
+
+    $db = $this->get('PDO');
+    $dbInstance = $db->getDB();
+
+    $res = array();
+    $query = "INSERT INTO orders (total_price, customer_rep, order_state, customer_id)
+              VALUES (:price,:cus_rep,'In production',:cid)";
+    $stmt = $dbInstance->prepare($query);
+    $stmt->bindValue(":price",$params['price']);
+    $stmt->bindValue(":cus_rep",$params['customer_rep']);
+    $stmt->bindValue(":cid",$customer_id);
+    $stmt->execute();
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $res[] = $row;
+    }
+
+    $response->getBody()->write(json_encode($res));
+    return $response;
+
+    return $response;
 });
 
 $app->delete('/customers/{customer_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
