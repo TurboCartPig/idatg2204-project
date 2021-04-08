@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS db_project.orders
     order_number  INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     parent_number INT REFERENCES `orders` (order_number),
     customer_id   INT REFERENCES `customer` (id),
-    customer_ref  INT REFERENCES employee (number),
+    customer_rep  INT REFERENCES employee (number),
     total_price   INT NOT NULL,
     order_state   VARCHAR(50) REFERENCES order_state (state)
 );
