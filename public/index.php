@@ -19,10 +19,15 @@ $container->set('PDO',function () {
 });
 
 $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Response $response, array $args) use (&$db) {
-    //TODO: Implement this endpoint
     $db = $this->get('PDO');
-    print_r($db->simpleQuery());
-    $response->getBody()->write("Hello");
+    $dbInstance = $db->getDB();
+    $res = array();
+    $query = "SELECT * FROM customer";
+    $stmt = $dbInstance->query($query);
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $res[] = $row;
+    }
+    print_r($res);
     return $response;
 });
 
