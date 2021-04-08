@@ -131,8 +131,6 @@ $app->post('/customers/{customer_id}/orders', function (Request $request, Respon
 
     $response->getBody()->write(json_encode($res));
     return $response;
-
-    return $response;
 });
 
 $app->delete('/customers/{customer_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
