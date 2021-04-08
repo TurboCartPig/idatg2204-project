@@ -197,3 +197,19 @@ VALUES (200, 2, 1),
 INSERT INTO `ski_type` (`type_id`, `name`)
 VALUES (1, 'classic'),
        (2, 'sprint');
+
+INSERT INTO `shipment_state` (`id`, `state`) VALUES 
+(1, 'Transit'), 
+(2, 'Ready');
+
+INSERT INTO `address` (`id`, `street`, `number`, `postal_code`, `city`) VALUES 
+(1, 'Sverre Iversens Vei ', '31', '0972', 'Oslo'), 
+(2, 'Begnaveien', '19', '3517', 'Honefoss');
+
+INSERT INTO `transporter` (`company_id`, `name`) VALUES 
+(1, 'Bring'), 
+(2, 'Bring2');
+
+INSERT INTO `shipment` (`shipment_number`, `address_id`, `pickup_date`, `shipment_state`, `order_number`, `transporter_id`, `driver_id`) VALUES 
+(1, 1, '2021-01-01', 2, 2, 1, 2), 
+(2, 2, '2021-02-01', 1, 4, 2, 1);
