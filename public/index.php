@@ -25,11 +25,12 @@ $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Resp
     $db = $this->get('PDO');
     $dbInstance = $db->getDB();
     $res = array();
-    $query = "SELECT * FROM orders
-                INNER JOIN customer ON id = customer_id
-                WHERE customer_id = :cid";
+    $query = "SELECT * FROM orders 
+                INNER JOIN employee ON employee.number = orders.customer_rep
+                WHERE employee.number = :eid";
     $stmt = $dbInstance->prepare($query);
-    $stmt->bindValue(":cid",)
+    $stmt->bindValue(":eid",$employeeID);
+    $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $res[] = $row;
     }
