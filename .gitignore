@@ -1,4 +1,3 @@
-.idea/db-project.iml
-.idea/php.xml
+.idea/*
 .vscode/*
 vendor/*
