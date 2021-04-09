@@ -219,7 +219,20 @@ $app->patch('/transporters/shipments/{shipment_number}', function (Request $requ
  * to find information about the various types of skis. The user may optionally specify a filter based on model names.
  */
 $app->get('/public/skis', function (Request $request, Response $response, array $args) {
-    //TODO: Implement this endpoint
+    $db = $this->get('PDO');
+    $dbInstance = $db->getDB();
+
+    $res = array();
+    $query = "SELECT * from ski";
+    $stmt = $dbInstance->prepare($query);
+    $stmt->execute();
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $res[] = $row;
+    }
+
+    $response->getBody()->write(json_encode($res));
+    return $response;
+
 });
 
 $app->run();
