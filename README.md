@@ -52,7 +52,8 @@ You can also run tests with the following command:
 ```bash
 composer test
 ```
-
+# Endpoints
+A complete overview of all available endpoints can be found in the project wiki.
 # Deployment
 
 > TODO
