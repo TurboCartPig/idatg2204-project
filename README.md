@@ -1,7 +1,7 @@
 # Project for IDATG2204
 
 # Database setup
-You need to run the provided initDB.sql file to generate a new instance of the database of which this project utilizes.
+You need to run the provided `initDB.sql` file to generate a new instance of the database of which this project utilizes.
 
 One way of doing this is to simply copy/paste the entire file and paste it into the SQL field on phpMyAdmin and running it there.
 All necessary tables will be generated and filled with some initial data. 
