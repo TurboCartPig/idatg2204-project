@@ -1,5 +1,15 @@
 # Project for IDATG2204
 
+The main focus so far have been to get crucial features up and running, we have implemented a wide variety of different endpoints to illustrate base functionality.
+
+
+So far the project lacks a few things:
+
+* Some endpoints are still not implemented
+* Tests have not been written yet
+* Code has not been modularized yet.
+* Error handling has not been implemented
+
 # Database setup
 You need to run the provided `initDB.sql` file to generate a new instance of the database of which this project utilizes.
 
