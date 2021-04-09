@@ -1,6 +1,8 @@
 <?php
 
-
+/**
+ * Class Database
+ */
 class Database
 {
     /**
