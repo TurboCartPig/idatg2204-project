@@ -8,6 +8,16 @@ All necessary tables will be generated and filled with some initial data.
 
 # DB credentials
 You need to provide your own db credentials file. This file should be placed in the `src/database` folder.
+
+An example of how the file structure would look like:
+```
+├── public
+├── src
+│   └── database
+│       └── dbCredentials.php
+├── README.md
+├── initDB.sql
+```
 The format of the file is as follows:
 ```phpregexp
 <?php
