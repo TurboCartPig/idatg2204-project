@@ -202,7 +202,7 @@ $app->patch('/transporters/shipments/{shipment_number}', function (Request $requ
 
 /**
  * The public endpoint should be open to anyone. Through this interface, any internet user should be able
- * to find information about the various types of skis. The user may optionally specify a filter based on model names. 
+ * to find information about the various types of skis. The user may optionally specify a filter based on model names.
  */
 $app->get('/public/skis', function (Request $request, Response $response, array $args) {
     //TODO: Implement this endpoint
