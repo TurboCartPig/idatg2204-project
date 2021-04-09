@@ -190,7 +190,21 @@ $app->get('/customers/summary', function (Request $request, Response $response, 
  * Retrieve information about orders being ready for shipment
  */
 $app->get('/transporters/shipments', function (Request $request, Response $response, array $args) {
-    //TODO: Implement this endpoint
+    $db = $this->get('PDO');
+    $dbInstance = $db->getDB();
+
+    $res = array();
+    $query = "SELECT * FROM shipment
+                WHERE shipment_state = 2";
+    $stmt = $dbInstance->prepare($query);
+    $stmt->execute();
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $res[] = $row;
+    }
+
+    $response->getBody()->write(json_encode($res));
+    return $response;
+
 });
 
 /**
