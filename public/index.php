@@ -111,9 +111,9 @@ $app->get('/customers/{customer_id}/orders', function (Request $request, Respons
     $res = array();
     $query = "SELECT * FROM orders 
                 INNER JOIN customer ON customer.id = orders.customer_id
-                WHERE :eid = orders.customer_id";
+                WHERE :cid = orders.customer_id";
     $stmt = $dbInstance->prepare($query);
-    $stmt->bindValue(":eid",$customerID);
+    $stmt->bindValue(":cid",$customerID);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $res[] = $row;

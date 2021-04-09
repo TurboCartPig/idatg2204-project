@@ -213,3 +213,24 @@ INSERT INTO `transporter` (`company_id`, `name`) VALUES
 INSERT INTO `shipment` (`shipment_number`, `address_id`, `pickup_date`, `shipment_state`, `order_number`, `transporter_id`, `driver_id`) VALUES 
 (1, 1, '2021-01-01', 2, 2, 1, 2), 
 (2, 2, '2021-02-01', 1, 4, 2, 1);
+
+INSERT INTO `temperature` (temp)
+VALUES ('warm'),('cold');
+
+INSERT INTO `grip_system` (`grip`)
+VALUES ('skin'),('plain');
+
+INSERT INTO `ski_model` (`name`)
+VALUES ('Superspeed 2000'),('Superspeed 3000'),('Superspeed 4000');
+
+INSERT INTO `weight_class` (`min_weight`,`max_weight`)
+VALUES (20,25),(25,30),(30,40),(40,50),(50,60),(60,70),(70,90),(90,110),(110,130);
+
+INSERT INTO `size_class` (`size`)
+VALUES (135),(140),(145),(150),(155),(160),(165),(170),(175),(180),(185),(190),(195),(200);
+
+INSERT INTO `ski` (`temp_class`,`grip`,`description`,`historical`,`msrp`,`type`,`model`,`weight`,`size`)
+VALUES ('cold','skin','Unisex model released in 2021',FALSE,4900,2,3,6,8),
+       ('warm','plain','Male model released in 2021',FALSE,6530,2,3,8,9),
+       ('cold','skin','Woman model released in 2021',FALSE,4300,2,2,5,6),
+       ('cold','skin','Unisex model released in 2020',FALSE,3900,2,3,6,8);
