@@ -19,6 +19,9 @@ $container->set('PDO', function () {
     return new Database();
 });
 
+/**
+ * Fetching all orders of which a given employee is responsible for.
+ */
 $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Response $response, array $args) use (&$db) {
     $employeeID = $args['employee_id'];
 
@@ -40,6 +43,9 @@ $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Resp
     return $response;
 });
 
+/**
+ * Changing the state of an order from new to open
+ */
 $app->put('/customer_rep/{employee_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
     $employeeID = $args['employee_id'];
     $order_number = $args['order_number'];
@@ -78,14 +84,24 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}', function (Request
 
 });
 
+/**
+ * Changing the state of an order from open to skies available when it should be filled up with skies
+ */
 $app->get('/customer_rep/{employee_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
     //TODO: Implement this endpoint
 });
 
+/**
+ * Create a shipment request when an order has been filled
+ */
 $app->get('/customer_rep/{employee_id}/shipments', function (Request $request, Response $response, array $args) {
     //TODO: Implement this endpoint
 });
 
+/**
+ * Retrieve a list of orders a given customer has made
+ * TODO: Implement the optional since filter.
+ */
 $app->get('/customers/{customer_id}/orders', function (Request $request, Response $response, array $args) {
     $customerID = $args['customer_id'];
 
@@ -107,6 +123,9 @@ $app->get('/customers/{customer_id}/orders', function (Request $request, Respons
     return $response;
 });
 
+/**
+ * Place a new order.
+ */
 $app->post('/customers/{customer_id}/orders', function (Request $request, Response $response, array $args) {
     $params = $request->getParsedBody();
     $response->getBody()->write(json_encode($params));
@@ -132,14 +151,25 @@ $app->post('/customers/{customer_id}/orders', function (Request $request, Respon
     return $response;
 });
 
+/**
+ * Cancel an order
+ */
 $app->delete('/customers/{customer_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
     //TODO: Implement this endpoint
 });
 
+/**
+ * Request that an order being split; on such a request, the unfilled items in the
+ * order is moved to a new order (set in the open state), and the existing order is
+ * changed from the skies available to ready for shipment state.
+ */
 $app->patch('/customers/{customer_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
     //TODO: Implement this endpoint
 });
 
+/**
+ * Retrieve a four-week production plan summary showing the total number of skies being planned for the period.
+ */
 $app->get('/customers/summary', function (Request $request, Response $response, array $args) {
     $db = $this->get('PDO');
     $dbInstance = $db->getDB();
@@ -156,14 +186,24 @@ $app->get('/customers/summary', function (Request $request, Response $response, 
     return $response;
 });
 
+/**
+ * Retrieve information about orders being ready for shipment
+ */
 $app->get('/transporters/shipments', function (Request $request, Response $response, array $args) {
     //TODO: Implement this endpoint
 });
 
+/**
+ * Change the state of the shipment when it has been picked up.
+ */
 $app->patch('/transporters/shipments/{shipment_number}', function (Request $request, Response $response, array $args) {
     //TODO: Implement this endpoint
 });
 
+/**
+ * The public endpoint should be open to anyone. Through this interface, any internet user should be able
+ * to find information about the various types of skis. The user may optionally specify a filter based on model names. 
+ */
 $app->get('/public/skis', function (Request $request, Response $response, array $args) {
     //TODO: Implement this endpoint
 });
