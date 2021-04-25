@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @param PDO $dbInstance
+ * @param mixed $employeeID
+ * @return array
+ */
 function fetchOrders(PDO $dbInstance, mixed $employeeID): array
 {
     $res = array();

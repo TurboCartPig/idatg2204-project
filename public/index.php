@@ -23,7 +23,7 @@ $container->set('PDO', function () {
 /**
  * Fetching all orders of which a given employee is responsible for.
  */
-$app->get('/customer_rep/{employee_id}/orders', function (Request $request, Response $response, array $args) use (&$db) {
+$app->get('/customer_rep/{employee_id}/orders', function (Request $request, Response $response, array $args) {
     $employeeID = $args['employee_id'];
 
     $db = $this->get('PDO');
