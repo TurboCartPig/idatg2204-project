@@ -200,13 +200,7 @@ $app->get('/public/skis', function (Request $request, Response $response, array 
     $db = $this->get('PDO');
     $dbInstance = $db->getDB();
 
-    $res = array();
-    $query = "SELECT * from ski";
-    $stmt = $dbInstance->prepare($query);
-    $stmt->execute();
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $res[] = $row;
-    }
+    $res = getSkis($dbInstance);
 
     $response->getBody()->write(json_encode($res));
     return $response;
