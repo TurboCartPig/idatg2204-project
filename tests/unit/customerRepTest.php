@@ -1,8 +1,8 @@
 <?php
-require './src/endpoints/customerRep.php';
-require './src/database/Database.php';
+require_once './src/endpoints/customerRep.php';
+require_once './src/database/Database.php';
 
-class customerRepTest extends \Codeception\Test\Unit
+class customerTest extends \Codeception\Test\Unit
 {
     /**
      * @var \UnitTester
