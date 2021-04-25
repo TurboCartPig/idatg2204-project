@@ -8,7 +8,7 @@ use Slim\Factory\AppFactory;
 require __DIR__ . '/../vendor/autoload.php';
 require_once '../src/database/Database.php';
 require_once '../src/database/dbCredentials.php';
-include '../src/database/customerRep.php';
+include '../src/endpoints/customerRep.php';
 
 header('Content-Type: application/json');
 $container = new Container();
