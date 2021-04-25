@@ -1,4 +1,5 @@
 <?php
+require_once './src/database/dbCredentials.php';
 
 /**
  * Class Database
