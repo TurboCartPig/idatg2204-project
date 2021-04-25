@@ -84,21 +84,11 @@ $app->post('/customer_rep/{employee_id}/shipments', function (Request $request, 
  * TODO: Implement the optional since filter.
  */
 $app->get('/customers/{customer_id}/orders', function (Request $request, Response $response, array $args) {
-    $customerID = $args['customer_id'];
-
     $db = $this->get('PDO');
     $dbInstance = $db->getDB();
 
-    $res = array();
-    $query = "SELECT * FROM orders 
-                INNER JOIN customer ON customer.id = orders.customer_id
-                WHERE :cid = orders.customer_id";
-    $stmt = $dbInstance->prepare($query);
-    $stmt->bindValue(":cid",$customerID);
-    $stmt->execute();
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $res[] = $row;
-    }
+    $customerID = $args['customer_id'];
+    $res = getOrdersForCustomer($dbInstance, $customerID);
 
     $response->getBody()->write(json_encode($res));
     return $response;
@@ -111,22 +101,10 @@ $app->post('/customers/{customer_id}/orders', function (Request $request, Respon
     $params = $request->getParsedBody();
     $response->getBody()->write(json_encode($params));
 
-    $customer_id = $args['customer_id'];
-
     $db = $this->get('PDO');
     $dbInstance = $db->getDB();
 
-    $res = array();
-    $query = "INSERT INTO orders (total_price, customer_rep, order_state, customer_id)
-              VALUES (:price,:cus_rep,'In production',:cid)";
-    $stmt = $dbInstance->prepare($query);
-    $stmt->bindValue(":price",$params['price']);
-    $stmt->bindValue(":cus_rep",$params['customer_rep']);
-    $stmt->bindValue(":cid",$customer_id);
-    $stmt->execute();
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $res[] = $row;
-    }
+    $res = createNewOrder($dbInstance, $params);
 
     $response->getBody()->write(json_encode($res));
     return $response;
@@ -155,13 +133,7 @@ $app->get('/customers/summary', function (Request $request, Response $response, 
     $db = $this->get('PDO');
     $dbInstance = $db->getDB();
 
-    $res = array();
-    $query = "SELECT * FROM production_plan";
-    $stmt = $dbInstance->prepare($query);
-    $stmt->execute();
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $res[] = $row;
-    }
+    $res = getProductionPlan($dbInstance);
 
     $response->getBody()->write(json_encode($res));
     return $response;
