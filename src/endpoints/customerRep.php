@@ -21,7 +21,12 @@ function fetchOrders(PDO $dbInstance, mixed $employeeID): array
 }
 
 
-
+/**
+ * @param PDO $dbInstance
+ * @param mixed $employeeID
+ * @param mixed $orderNumber
+ * @return array
+ */
 function updateOrderState(PDO $dbInstance, mixed $employeeID, mixed $orderNumber): array
 {
     $dbInstance->beginTransaction();
