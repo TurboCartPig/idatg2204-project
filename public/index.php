@@ -62,8 +62,17 @@ $app->get('/customer_rep/{employee_id}/orders/{order_number}', function (Request
 /**
  * Create a shipment request when an order has been filled
  */
-$app->get('/customer_rep/{employee_id}/shipments', function (Request $request, Response $response, array $args) {
-    //TODO: Implement this endpoint
+$app->post('/customer_rep/{employee_id}/shipments', function (Request $request, Response $response, array $args) {
+    $employeeID = $args['employee_id'];
+    $params = $request->getParsedBody();
+
+    $db = $this->get('PDO');
+    $dbInstance = $db->getDB();
+
+//    $res = createShipment($dbInstance, $employeeID, $order_number);
+
+    $response->getBody()->write(json_encode($params));
+    return $response;
 });
 
 /**
