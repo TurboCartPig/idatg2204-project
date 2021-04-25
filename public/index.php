@@ -8,6 +8,7 @@ use Slim\Factory\AppFactory;
 require __DIR__ . '/../vendor/autoload.php';
 require_once '../src/database/Database.php';
 require_once '../src/database/dbCredentials.php';
+include '../src/database/customerRep.php';
 
 header('Content-Type: application/json');
 $container = new Container();
@@ -28,16 +29,7 @@ $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Resp
     $db = $this->get('PDO');
     $dbInstance = $db->getDB();
 
-    $res = array();
-    $query = "SELECT * FROM orders 
-                INNER JOIN employee ON employee.number = orders.customer_rep
-                WHERE employee.number = :eid";
-    $stmt = $dbInstance->prepare($query);
-    $stmt->bindValue(":eid", $employeeID);
-    $stmt->execute();
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $res[] = $row;
-    }
+    $res = fetchOrders($dbInstance,$employeeID);
 
     $response->getBody()->write(json_encode($res));
     return $response;
