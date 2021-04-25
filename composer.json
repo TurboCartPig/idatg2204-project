@@ -25,10 +25,6 @@
         "slim/slim": "^4.7",
         "php-di/slim-bridge": "^3.1"
     },
-    "scripts": {
-        "start": "php -S localhost:8080 -t public",
-        "test": "echo 'NOT IMPLEMENTED"
-    },
     "require-dev": {
         "codeception/codeception": "^4.1",
         "codeception/module-phpbrowser": "^1.0.0",
@@ -38,5 +34,9 @@
         "psr-4":{
             "Del\\":"src/"
         }
+    },
+    "scripts": {
+        "start": "php -S localhost:8080 -t public",
+        "test": "php ./vendor/bin/codecept run"
     }
 }
