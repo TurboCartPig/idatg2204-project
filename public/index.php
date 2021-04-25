@@ -8,7 +8,10 @@ use Slim\Factory\AppFactory;
 require __DIR__ . '/../vendor/autoload.php';
 require_once '../src/database/Database.php';
 require_once '../src/database/dbCredentials.php';
+require_once '../src/endpoints/customer.php';
 require_once '../src/endpoints/customerRep.php';
+require_once '../src/endpoints/transporters.php';
+require_once '../src/endpoints/public.php';
 
 header('Content-Type: application/json');
 $container = new Container();
@@ -171,14 +174,7 @@ $app->get('/transporters/shipments', function (Request $request, Response $respo
     $db = $this->get('PDO');
     $dbInstance = $db->getDB();
 
-    $res = array();
-    $query = "SELECT * FROM shipment
-                WHERE shipment_state = 2";
-    $stmt = $dbInstance->prepare($query);
-    $stmt->execute();
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $res[] = $row;
-    }
+    $res = getShipments($dbInstance);
 
     $response->getBody()->write(json_encode($res));
     return $response;
