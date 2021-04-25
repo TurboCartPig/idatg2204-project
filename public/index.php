@@ -64,14 +64,15 @@ $app->get('/customer_rep/{employee_id}/orders/{order_number}', function (Request
  */
 $app->post('/customer_rep/{employee_id}/shipments', function (Request $request, Response $response, array $args) {
     $employeeID = $args['employee_id'];
-    $params = $request->getParsedBody();
+    $body = $request->getParsedBody();
 
     $db = $this->get('PDO');
     $dbInstance = $db->getDB();
 
-//    $res = createShipment($dbInstance, $employeeID, $order_number);
+    $res = createShipment($dbInstance, $employeeID, $body);
 
-    $response->getBody()->write(json_encode($params));
+    $response->withStatus($res['status']);
+    $response->getBody()->write($res['body']);
     return $response;
 });
 
