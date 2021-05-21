@@ -43,16 +43,16 @@ CREATE TABLE IF NOT EXISTS db_project.size_class
 CREATE TABLE IF NOT EXISTS db_project.ski
 (
     ski_id      INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    temp_class  VARCHAR(10) NOT NULL REFERENCES temperature (temp),
-    grip        VARCHAR(50) NOT NULL REFERENCES grip_system (grip),
+    temp_class  VARCHAR(10) NOT NULL REFERENCES temperature (temp) ON UPDATE CASCADE ON DELETE NO ACTION,
+    grip        VARCHAR(50) NOT NULL REFERENCES grip_system (grip) ON UPDATE CASCADE ON DELETE NO ACTION,
     description VARCHAR(500),
     historical  BOOLEAN,
     photo       LONGBLOB,
     msrp        INT         NOT NULL,
-    type        INT         NOT NULL REFERENCES ski_type (type_id),
-    model       INT         NOT NULL REFERENCES ski_model (model_id),
-    weight      INT         NOT NULL REFERENCES weight_class (class_id),
-    size        INT         NOT NULL REFERENCES size_class (class_id)
+    type        INT         NOT NULL REFERENCES ski_type (type_id) ON UPDATE CASCADE ON DELETE NO ACTION,
+    model       INT         NOT NULL REFERENCES ski_model (model_id) ON UPDATE CASCADE ON DELETE NO ACTION,
+    weight      INT         NOT NULL REFERENCES weight_class (class_id) ON UPDATE CASCADE ON DELETE NO ACTION,
+    size        INT         NOT NULL REFERENCES size_class (class_id) ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
 
@@ -65,17 +65,17 @@ CREATE TABLE IF NOT EXISTS db_project.order_state
 CREATE TABLE IF NOT EXISTS db_project.orders
 (
     order_number  INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    parent_number INT REFERENCES `orders` (order_number),
-    customer_id   INT REFERENCES `customer` (id),
-    customer_rep  INT REFERENCES employee (number),
+    parent_number INT REFERENCES `orders` (order_number) ON UPDATE CASCADE ON DELETE SET NULL,
+    customer_id   INT REFERENCES `customer` (id) ON UPDATE CASCADE ON DELETE SET NULL,
+    customer_rep  INT REFERENCES employee (number) ON UPDATE CASCADE ON DELETE SET NULL,
     total_price   INT NOT NULL,
-    order_state   INT REFERENCES order_state (id)
+    order_state   INT REFERENCES order_state (id) ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
 CREATE TABLE IF NOT EXISTS db_project.skiis_in_order
 (
-    order_number INT NOT NULL REFERENCES `orders` (order_number),
-    ski_id       INT NOT NULL REFERENCES ski (ski_id),
+    order_number INT NOT NULL REFERENCES `orders` (order_number) ON UPDATE CASCADE ON DELETE NO ACTION,
+    ski_id       INT NOT NULL REFERENCES ski (ski_id) ON UPDATE CASCADE ON DELETE NO ACTION,
     quantity     INT NOT NULL,
     PRIMARY KEY (order_number, ski_id)
 );
@@ -95,6 +95,7 @@ CREATE TABLE IF NOT EXISTS db_project.address
     city        VARCHAR(50) NOT NULL
 );
 
+-- NOTE: Shipment state rows must not be modified without modifying the code as well. Which is reflected in ON UPDATE and ON DELETE actions.
 CREATE TABLE IF NOT EXISTS db_project.shipment_state
 (
     id    INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -104,11 +105,11 @@ CREATE TABLE IF NOT EXISTS db_project.shipment_state
 CREATE TABLE IF NOT EXISTS db_project.shipment
 (
     shipment_number INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    address_id      INT  NOT NULL REFERENCES address (id),
+    address_id      INT  NOT NULL REFERENCES address (id) ON UPDATE CASCADE ON DELETE NO ACTION,
     pickup_date     DATE NOT NULL,
-    shipment_state  INT  NOT NULL REFERENCES shipment_state (id),
-    order_number    INT  NOT NULL REFERENCES `orders` (order_number),
-    transporter_id  INT  NOT NULL REFERENCES transporter (company_id),
+    shipment_state  INT  NOT NULL REFERENCES shipment_state (id) ON UPDATE NO ACTION ON DELETE NO ACTION, -- Can not modify shipment_state values live
+    order_number    INT  NOT NULL REFERENCES `orders` (order_number) ON UPDATE CASCADE ON DELETE NO ACTION, -- Can not cancel order after shipment has been created
+    transporter_id  INT  NOT NULL REFERENCES transporter (company_id) ON UPDATE CASCADE ON DELETE NO ACTION,
     driver_id       INT  NOT NULL
 );
 
@@ -123,7 +124,7 @@ CREATE TABLE IF NOT EXISTS db_project.employee
 (
     number INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name   VARCHAR(50) NOT NULL,
-    role   INT         NOT NULL REFERENCES employee_role (id)
+    role   INT         NOT NULL REFERENCES employee_role (id) ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
 CREATE TABLE IF NOT EXISTS db_project.customer
@@ -131,30 +132,30 @@ CREATE TABLE IF NOT EXISTS db_project.customer
     id           INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
     start_date   DATE NOT NULL,
     end_date     DATE NOT NULL,
-    customer_rep INT  NOT NULL REFERENCES employee (number)
+    customer_rep INT  REFERENCES employee (number) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS db_project.customer_franchise
 (
-    id                INT         NOT NULL PRIMARY KEY REFERENCES customer (id),
+    id                INT         NOT NULL PRIMARY KEY REFERENCES customer (id) ON UPDATE CASCADE ON DELETE CASCADE,
     name              VARCHAR(50) NOT NULL,
-    address           INT         NOT NULL REFERENCES address (id),
+    address           INT         NOT NULL REFERENCES address (id) ON UPDATE CASCADE ON DELETE NO ACTION,
     buying_price      INT         NOT NULL,
     store_information VARCHAR(500)
 );
 
 CREATE TABLE IF NOT EXISTS db_project.individual_store
 (
-    id           INT         NOT NULL PRIMARY KEY REFERENCES customer (id),
+    id           INT         NOT NULL PRIMARY KEY REFERENCES customer (id) ON UPDATE CASCADE ON DELETE CASCADE,
     franchise_id INT REFERENCES customer_franchise (id),
     name         VARCHAR(50) NOT NULL,
-    address      INT         NOT NULL REFERENCES address (id),
+    address      INT         NOT NULL REFERENCES address (id) ON UPDATE CASCADE ON DELETE NO ACTION,
     buying_price INT         NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS db_project.teams_skier
 (
-    id            INT         NOT NULL PRIMARY KEY REFERENCES customer (id),
+    id            INT         NOT NULL PRIMARY KEY REFERENCES customer (id) ON UPDATE CASCADE ON DELETE CASCADE,
     name          VARCHAR(50) NOT NULL,
     date_of_birth DATE        NOT NULL,
     club          VARCHAR(50) NOT NULL
@@ -163,14 +164,13 @@ CREATE TABLE IF NOT EXISTS db_project.teams_skier
 CREATE TABLE IF NOT EXISTS db_project.production_plan
 (
     num_of_skies INT NOT NULL,
-    ski_type     INT NOT NULL REFERENCES ski_type (type_id),
-    manager      INT NOT NULL REFERENCES employee (number),
+    ski_type     INT NOT NULL REFERENCES ski_type (type_id) ON UPDATE CASCADE ON DELETE NO ACTION,
+    manager      INT REFERENCES employee (number) ON UPDATE CASCADE ON DELETE SET NULL,
     PRIMARY KEY (num_of_skies, ski_type)
 );
 
 INSERT INTO `auth_token` (`token`)
 VALUE ('customer_rep');
-
 
 INSERT INTO `customer` (`id`, `start_date`, `end_date`, `customer_rep`)
 VALUES (1, '2020-01-01', '2021-01-01', 2),
