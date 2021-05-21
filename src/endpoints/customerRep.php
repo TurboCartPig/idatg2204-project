@@ -8,9 +8,8 @@
 function fetchOrders(PDO $dbInstance, mixed $employeeID): array
 {
     $res = array();
-    $query = "SELECT * FROM orders 
-                INNER JOIN employee ON employee.number = orders.customer_rep
-                WHERE employee.number = :eid";
+    $query = "SELECT * FROM employee_orders
+                WHERE employee_number = :eid";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":eid", $employeeID);
     $stmt->execute();
@@ -31,9 +30,8 @@ function updateOrderState(PDO $dbInstance, mixed $employeeID, mixed $orderNumber
 {
     $dbInstance->beginTransaction();
     $res = array();
-    $query = "SELECT * FROM orders 
-                INNER JOIN employee ON employee.number = orders.customer_rep
-                WHERE employee.number = :eid AND orders.order_number = :onb AND orders.order_state = 'In production'";
+    $query = "SELECT * FROM employee_orders
+                WHERE employee_number = :eid AND order_number = :onb AND order_state = 'In production'";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":eid", $employeeID);
     $stmt->bindValue(":onb", $orderNumber);
@@ -76,9 +74,8 @@ function createShipment(PDO $dbInstance, mixed $employeeID, mixed $body)
     $dbInstance->beginTransaction();
 
     $res = array();
-    $query = "SELECT * FROM orders
-              INNER JOIN employee ON employee.number = orders.customer_id
-              WHERE employee.number = :eid AND orders.order_number = :onb AND orders.order_state = 'Ready for shipping'";
+    $query = "SELECT * FROM employee_orders
+              WHERE employee_number = :eid AND order_number = :onb AND order_state = 'Ready for shipping'";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":eid", $employeeID);
     $stmt->bindValue(":onb", $body['order_number']);

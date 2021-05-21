@@ -236,7 +236,16 @@ VALUES ('cold','skin','Unisex model released in 2021',FALSE,4900,2,3,6,8),
        ('cold','skin','Unisex model released in 2020',FALSE,3900,2,3,6,8);
 
 -- Create a view of the orders table, from the perspective of the employees.
-CREATE VIEW employee_orders
-AS SELECT employee.number AS employee_number, order_number, customer_id, customer_rep, total_price, order_state
-   FROM orders
-   INNER JOIN employee ON employee.number = orders.customer_rep
+CREATE VIEW employee_orders AS
+SELECT employee.number AS employee_number, order_number, customer_id, customer_rep, total_price, order_state
+FROM orders
+INNER JOIN employee ON employee.number = orders.customer_rep;
+
+-- Create a view of all shipments ready for shipping.
+CREATE VIEW ready_shipments AS
+SELECT shipment_number, order_number, pickup_date, street, number, postal_code, city, shipment_state.state, transporter.name
+FROM shipment
+INNER JOIN shipment_state ON shipment.shipment_state = shipment_state.id
+INNER JOIN address ON address.id = address_id
+INNER JOIN transporter ON transporter.company_id = transporter_id
+WHERE shipment_state.state = 'Ready';
