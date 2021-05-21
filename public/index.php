@@ -40,8 +40,8 @@ $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Resp
 
         $response->getBody()->write(json_encode($res));
     } else {
-        $response->withStatus(401);
         $response->getBody()->write("User not authorized!");
+        return $response->withStatus(401);
     }
 
     return $response;
@@ -60,9 +60,8 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}', function (Request
 
     $res = updateOrderState($dbInstance, $employeeID, $orderNumber);
 
-    $response->withStatus($res['status']);
     $response->getBody()->write($res['body']);
-    return $response;
+    return $response->withStatus($res['status']);
 });
 
 /**
@@ -84,9 +83,8 @@ $app->post('/customer_rep/{employee_id}/shipments', function (Request $request, 
 
     $res = createShipment($dbInstance, $employeeID, $body);
 
-    $response->withStatus($res['status']);
     $response->getBody()->write($res['body']);
-    return $response;
+    return $response->withStatus($res['status']);
 });
 
 /**
@@ -166,8 +164,14 @@ $app->get('/transporters/shipments', function (Request $request, Response $respo
 /**
  * Change the state of the shipment when it has been picked up.
  */
-$app->patch('/transporters/shipments/{shipment_number}', function (Request $request, Response $response, array $args) {
-    //TODO: Implement this endpoint
+$app->put('/transporters/shipments/{shipment_number}', function (Request $request, Response $response, array $args) {
+    $db = $this->get('PDO');
+    $dbInstance = $db->getDB();
+    $shipment_number = $args['shipment_number'];
+
+    changeShipmentState($dbInstance, $shipment_number, 1);
+
+    return $response->withStatus(204);
 });
 
 /**
