@@ -169,26 +169,42 @@ $app->patch('/customers/{customer_id}/orders/{order_number}', function (Request 
  * Retrieve a four-week production plan summary showing the total number of skies being planned for the period.
  */
 $app->get('/customers/summary', function (Request $request, Response $response, array $args) {
+    $token = $request->getHeaderLine('token');
+
     $db = $this->get('PDO');
-    $dbInstance = $db->getDB();
+    if ($db->isAuthorized($token)) {
+        $dbInstance = $db->getDB();
 
-    $res = getProductionPlan($dbInstance);
+        $res = getProductionPlan($dbInstance);
 
-    $response->getBody()->write(json_encode($res));
-    return $response;
+        $response->getBody()->write(json_encode($res));
+        return $response;
+    } else {
+        $response->getBody()->write(UNAUTHORIZED_TEXT);
+        return $response->withStatus(HTTP_UNAUTHORIZED);
+    }
+
 });
 
 /**
  * Retrieve information about orders being ready for shipment
  */
 $app->get('/transporters/shipments', function (Request $request, Response $response, array $args) {
+    $token = $request->getHeaderLine('token');
+
     $db = $this->get('PDO');
-    $dbInstance = $db->getDB();
+    if ($db->isAuthorized($token)) {
 
-    $res = getShipments($dbInstance);
+        $dbInstance = $db->getDB();
 
-    $response->getBody()->write(json_encode($res));
-    return $response;
+        $res = getShipments($dbInstance);
+
+        $response->getBody()->write(json_encode($res));
+        return $response;
+    } else {
+        $response->getBody()->write(UNAUTHORIZED_TEXT);
+        return $response->withStatus(HTTP_UNAUTHORIZED);
+    }
 
 });
 
