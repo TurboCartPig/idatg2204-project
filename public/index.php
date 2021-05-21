@@ -95,8 +95,8 @@ $app->post('/customer_rep/{employee_id}/shipments', function (Request $request, 
         $response->getBody()->write($res['body']);
         return $response->withStatus($res['status']);
     } else {
-        $response->withStatus(HTTP_UNAUTHORIZED);
         $response->getBody()->write(UNAUTHORIZED_TEXT);
+        return $response->withStatus(HTTP_UNAUTHORIZED);
     }
 });
 
@@ -117,8 +117,8 @@ $app->get('/customers/{customer_id}/orders', function (Request $request, Respons
 
         $response->getBody()->write(json_encode($res));
     } else {
-        $response->withStatus(HTTP_UNAUTHORIZED);
         $response->getBody()->write(UNAUTHORIZED_TEXT);
+        return $response->withStatus(HTTP_UNAUTHORIZED);
     }
 
     return $response;
