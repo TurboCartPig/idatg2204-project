@@ -50,6 +50,16 @@ function createNewOrder(PDO $dbInstance, array $params): array
  * @param int $order_number
  */
 function deleteOrder(PDO $dbInstance, int $customer_id, int $order_number) {
+    $query = "SELECT COUNT(*) FROM orders WHERE order_number = :order_number AND customer_id = :customer_id";
+    $stmt = $dbInstance->prepare($query);
+    $stmt->bindValue(":customer_id", $customer_id);
+    $stmt->bindValue(":order_number", $order_number);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_NUM);
+    if ($row[0] != 1) {
+        throw new RuntimeException("Order does not exist or is not associated with this customer id");
+    }
+
     $query = "DELETE FROM orders WHERE order_number = :order_number AND customer_id = :customer_id";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":customer_id", $customer_id);

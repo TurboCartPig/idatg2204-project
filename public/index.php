@@ -170,7 +170,7 @@ $app->delete('/customers/{customer_id}/orders/{order_number}', function (Request
 
         try {
             deleteOrder($dbInstance, $customer_id, $order_number);
-        } catch (PDOException) {
+        } catch (RuntimeException $except) {
             $response->getBody()->write("Failed to cancel order. Check order number and customer id. Only the owner of an order can cancel it.");
             return $response->withStatus(HTTP_BAD_REQUEST);
         }
