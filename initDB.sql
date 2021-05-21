@@ -234,3 +234,9 @@ VALUES ('cold','skin','Unisex model released in 2021',FALSE,4900,2,3,6,8),
        ('warm','plain','Male model released in 2021',FALSE,6530,2,3,8,9),
        ('cold','skin','Woman model released in 2021',FALSE,4300,2,2,5,6),
        ('cold','skin','Unisex model released in 2020',FALSE,3900,2,3,6,8);
+
+-- Create a view of the orders table, from the perspective of the employees.
+CREATE VIEW employee_orders
+AS SELECT employee.number AS employee_number, order_number, customer_id, customer_rep, total_price, order_state
+   FROM orders
+   INNER JOIN employee ON employee.number = orders.customer_rep
