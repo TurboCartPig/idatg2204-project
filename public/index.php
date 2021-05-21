@@ -84,7 +84,7 @@ $app->get('/customer_rep/{employee_id}/orders/{order_number}', function (Request
 $app->post('/customer_rep/{employee_id}/shipments', function (Request $request, Response $response, array $args) {
     $employeeID = $args['employee_id'];
     $token      = $request->getHeaderLine('token');
-    $body = $request->getParsedBody();
+    $body       = $request->getParsedBody();
 
     $db = $this->get('PDO');
     if ($db->isAuthorized($token)) {
@@ -96,7 +96,7 @@ $app->post('/customer_rep/{employee_id}/shipments', function (Request $request, 
         return $response->withStatus($res['status']);
     } else {
         $response->withStatus(HTTP_UNAUTHORIZED);
-        $response->getBody()->write("User not authorized");
+        $response->getBody()->write(UNAUTHORIZED_TEXT);
     }
 });
 
@@ -105,13 +105,22 @@ $app->post('/customer_rep/{employee_id}/shipments', function (Request $request, 
  * TODO: Implement the optional since filter.
  */
 $app->get('/customers/{customer_id}/orders', function (Request $request, Response $response, array $args) {
-    $db = $this->get('PDO');
-    $dbInstance = $db->getDB();
-
     $customerID = $args['customer_id'];
-    $res = getOrdersForCustomer($dbInstance, $customerID);
+    $token      = $request->getHeaderLine('token');
 
-    $response->getBody()->write(json_encode($res));
+    $db = $this->get('PDO');
+    if ($db->isAuthorized($token)) {
+
+        $dbInstance = $db->getDB();
+
+        $res = getOrdersForCustomer($dbInstance, $customerID);
+
+        $response->getBody()->write(json_encode($res));
+    } else {
+        $response->withStatus(HTTP_UNAUTHORIZED);
+        $response->getBody()->write(UNAUTHORIZED_TEXT);
+    }
+
     return $response;
 });
 
