@@ -50,9 +50,9 @@ $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Resp
 });
 
 /**
- * Changing the state of an order from new to open
+ * Changing the state of an order from new to open.
  */
-$app->put('/customer_rep/{employee_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
+$app->put('/customer_rep/{employee_id}/orders/{order_number}/open', function (Request $request, Response $response, array $args) {
     $employeeID = $args['employee_id'];
     $orderNumber = $args['order_number'];
     $token      = $request->getHeaderLine('token');
@@ -61,7 +61,7 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}', function (Request
     if ($db->isAuthorized($token)) {
         $dbInstance = $db->getDB();
 
-        $res = updateOrderState($dbInstance, $employeeID, $orderNumber);
+        $res = updateOrderState($dbInstance, $employeeID, $orderNumber, 2);
 
         $response->getBody()->write($res['body']);
         return $response->withStatus($res['status']);
@@ -72,10 +72,25 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}', function (Request
 });
 
 /**
- * Changing the state of an order from open to skies available when it should be filled up with skies
+ * Changing the state of an order from open to shipping.
  */
-$app->get('/customer_rep/{employee_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
-    //TODO: Implement this endpoint
+$app->put('/customer_rep/{employee_id}/orders/{order_number}/shipping', function (Request $request, Response $response, array $args) {
+    $employeeID = $args['employee_id'];
+    $orderNumber = $args['order_number'];
+    $token      = $request->getHeaderLine('token');
+
+    $db = $this->get('PDO');
+    if ($db->isAuthorized($token)) {
+        $dbInstance = $db->getDB();
+
+        $res = updateOrderState($dbInstance, $employeeID, $orderNumber, 3);
+
+        $response->getBody()->write($res['body']);
+        return $response->withStatus($res['status']);
+    } else {
+        $response->getBody()->write(UNAUTHORIZED_TEXT);
+        return $response->withStatus(HTTP_UNAUTHORIZED);
+    }
 });
 
 /**
