@@ -159,10 +159,29 @@ $app->post('/customers/orders', function (Request $request, Response $response, 
 });
 
 /**
- * Cancel an order
+ * Cancel an order.
  */
 $app->delete('/customers/{customer_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
-    //TODO: Implement this endpoint
+    $customer_id = $args['customer_id'];
+    $order_number = $args['order_number'];
+    $token = $request->getHeaderLine('token');
+
+    $db = $this->get('PDO');
+    if ($db->isAuthorized($token)) {
+        $dbInstance = $db->getDB();
+
+        try {
+            deleteOrder($dbInstance, $customer_id, $order_number);
+        } catch (PDOException) {
+            $response->getBody()->write("Failed to cancel order. Check order number and customer id. Only the owner of an order can cancel it.");
+            return $response->withStatus(HTTP_BAD_REQUEST);
+        }
+
+        return $response->withStatus(HTTP_NO_CONTENT);
+    } else {
+        $response->getBody()->write(UNAUTHORIZED_TEXT);
+        return $response->withStatus(HTTP_UNAUTHORIZED);
+    }
 });
 
 /**
@@ -192,7 +211,6 @@ $app->get('/customers/summary', function (Request $request, Response $response, 
         $response->getBody()->write(UNAUTHORIZED_TEXT);
         return $response->withStatus(HTTP_UNAUTHORIZED);
     }
-
 });
 
 /**

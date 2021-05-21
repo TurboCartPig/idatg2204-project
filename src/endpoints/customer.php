@@ -44,6 +44,20 @@ function createNewOrder(PDO $dbInstance, array $params): array
 }
 
 /**
+ * Deletes a single order from the orders table.
+ * @param PDO $dbInstance
+ * @param int $customer_id
+ * @param int $order_number
+ */
+function deleteOrder(PDO $dbInstance, int $customer_id, int $order_number) {
+    $query = "DELETE FROM orders WHERE order_number = :order_number AND customer_id = :customer_id";
+    $stmt = $dbInstance->prepare($query);
+    $stmt->bindValue(":customer_id", $customer_id);
+    $stmt->bindValue(":order_number", $order_number);
+    $stmt->execute();
+}
+
+/**
  * @param PDO $dbInstance
  * @return array
  */
