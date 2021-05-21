@@ -13,7 +13,8 @@ function getShipments(PDO $dbInstance): array
     return $res;
 }
 
-function changeShipmentState(PDO $dbInstance, int $shipment_number, int $state) {
+function changeShipmentState(PDO $dbInstance, int $shipment_number, int $state)
+{
     $query = "UPDATE shipment
                 SET shipment_state = :state
                 WHERE shipment_number = :shipment_number";

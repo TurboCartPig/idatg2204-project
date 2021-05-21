@@ -30,7 +30,7 @@ function createNewOrder(PDO $dbInstance, array $params): array
 {
     $res = array();
     $query = "INSERT INTO orders (total_price, customer_rep, order_state, customer_id)
-              VALUES (:price,:cus_rep,'In production',:cid)";
+              VALUES (:price,:cus_rep,1,:cid)";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":price", $params['price']);
     $stmt->bindValue(":cus_rep", $params['customer_rep']);

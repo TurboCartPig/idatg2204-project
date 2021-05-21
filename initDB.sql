@@ -58,7 +58,8 @@ CREATE TABLE IF NOT EXISTS db_project.ski
 
 CREATE TABLE IF NOT EXISTS db_project.order_state
 (
-    state VARCHAR(50) NOT NULL PRIMARY KEY
+    id    INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    state VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS db_project.orders
@@ -68,7 +69,7 @@ CREATE TABLE IF NOT EXISTS db_project.orders
     customer_id   INT REFERENCES `customer` (id),
     customer_rep  INT REFERENCES employee (number),
     total_price   INT NOT NULL,
-    order_state   VARCHAR(50) REFERENCES order_state (state)
+    order_state   INT REFERENCES order_state (id)
 );
 
 CREATE TABLE IF NOT EXISTS db_project.skiis_in_order
@@ -185,18 +186,19 @@ INSERT INTO `employee_role` (`id`, `role`)
 VALUES (1, 'manager');
 
 INSERT INTO `orders` (`order_number`, `parent_number`, `customer_id`, `customer_rep`, `total_price`, `order_state`)
-VALUES (1, 2, 1, 1, 120000, 'In production'),
-       (2, 2, 1, 1, 234000, 'Ready for shipping'),
-       (3, 1, 2, 1, 320000, 'In production'),
-       (4, 1, 2, 1, 120000, 'Ready for shipping'),
-       (5, 3, 3, 1, 410000, 'In production'),
-       (6, 3, 3, 1, 120000, 'Ready for shipping'),
-       (7, 4, 4, 1, 210000, 'In production'),
-       (8, 4, 4, 1, 110000, 'Ready for shipping');
+VALUES (1, 2, 1, 1, 120000, 2),
+       (2, 2, 1, 1, 234000, 3),
+       (3, 1, 2, 1, 320000, 1),
+       (4, 1, 2, 1, 120000, 2),
+       (5, 3, 3, 1, 410000, 3),
+       (6, 3, 3, 1, 120000, 2),
+       (7, 4, 4, 1, 210000, 1),
+       (8, 4, 4, 1, 110000, 2);
 
-INSERT INTO `order_state` (`state`)
-VALUES ('In production'),
-       ('Ready for shipping');
+INSERT INTO `order_state` (`id`, `state`)
+VALUES (1, 'New'),
+       (2, 'Open'),
+       (3, 'Ready for shipping');
 
 INSERT INTO `production_plan` (`num_of_skies`, `ski_type`, `manager`)
 VALUES (200, 2, 1),

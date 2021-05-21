@@ -25,17 +25,23 @@ function fetchOrders(PDO $dbInstance, mixed $employeeID): array
  * @param PDO $dbInstance
  * @param mixed $employeeID
  * @param mixed $orderNumber
+ * @param int $state New state of the order.
  * @return array
  */
-function updateOrderState(PDO $dbInstance, mixed $employeeID, mixed $orderNumber): array
+function updateOrderState(PDO $dbInstance, mixed $employeeID, mixed $orderNumber, int $state): array
 {
     $dbInstance->beginTransaction();
+
+
     $res = array();
+
+    // Check if the order is in the previous state, and only update if it is.
     $query = "SELECT * FROM employee_orders
-                WHERE employee_number = :eid AND order_number = :onb AND order_state = 'In production'";
+                WHERE employee_number = :eid AND order_number = :onb AND order_state = :state";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":eid", $employeeID);
     $stmt->bindValue(":onb", $orderNumber);
+    $stmt->bindValue(":state", $state - 1);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $res[] = $row;
@@ -43,17 +49,18 @@ function updateOrderState(PDO $dbInstance, mixed $employeeID, mixed $orderNumber
 
     // If there is not exactly ONE order matched by the above statement, then something is wrong.
     if (count($res) != 1) {
-        $dbInstance->commit();
+        $dbInstance->rollback();
         $data['body'] = "The order is either not associated with this employee or it does not exits";
         $data['status'] = 400;
         return $data;
     }
 
     $query = "UPDATE orders 
-                SET orders.order_state = 'Ready for shipping'
+                SET orders.order_state = :state
                 WHERE orders.order_number = :onb";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":onb", $orderNumber);
+    $stmt->bindValue(":state", $state);
     $stmt->execute();
 
     $dbInstance->commit();
@@ -76,7 +83,7 @@ function createShipment(PDO $dbInstance, mixed $employeeID, mixed $body)
 
     $res = array();
     $query = "SELECT * FROM employee_orders
-              WHERE employee_number = :eid AND order_number = :onb AND order_state = 'Ready for shipping'";
+              WHERE employee_number = :eid AND order_number = :onb AND order_state = 3";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":eid", $employeeID);
     $stmt->bindValue(":onb", $body['order_number']);
