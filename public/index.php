@@ -83,15 +83,21 @@ $app->get('/customer_rep/{employee_id}/orders/{order_number}', function (Request
  */
 $app->post('/customer_rep/{employee_id}/shipments', function (Request $request, Response $response, array $args) {
     $employeeID = $args['employee_id'];
+    $token      = $request->getHeaderLine('token');
     $body = $request->getParsedBody();
 
     $db = $this->get('PDO');
-    $dbInstance = $db->getDB();
+    if ($db->isAuthorized($token)) {
+        $dbInstance = $db->getDB();
 
-    $res = createShipment($dbInstance, $employeeID, $body);
+        $res = createShipment($dbInstance, $employeeID, $body);
 
-    $response->getBody()->write($res['body']);
-    return $response->withStatus($res['status']);
+        $response->getBody()->write($res['body']);
+        return $response->withStatus($res['status']);
+    } else {
+        $response->withStatus(HTTP_UNAUTHORIZED);
+        $response->getBody()->write("User not authorized");
+    }
 });
 
 /**
