@@ -116,7 +116,7 @@ $app->get('/customers/{customer_id}/orders', function (Request $request, Respons
         $res = getOrdersForCustomer($dbInstance, $customerID);
 
         $response->getBody()->write(json_encode($res));
-        return $response
+        return $response;
     } else {
         $response->getBody()->write(UNAUTHORIZED_TEXT);
         return $response->withStatus(HTTP_UNAUTHORIZED);
@@ -220,7 +220,7 @@ $app->put('/transporters/shipments/{shipment_number}', function (Request $reques
 
         changeShipmentState($dbInstance, $shipment_number, 1);
 
-        return $response->withStatus(204);
+        return $response->withStatus(HTTP_NO_CONTENT);
     } else {
         $response->getBody()->write(UNAUTHORIZED_TEXT);
         return $response->withStatus(HTTP_UNAUTHORIZED);
