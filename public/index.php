@@ -142,14 +142,13 @@ $app->get('/customers/{customer_id}/orders', function (Request $request, Respons
  * Place a new order.
  */
 $app->post('/customers/orders', function (Request $request, Response $response, array $args) {
-    $params = $request->getParsedBody();
+    $params = $request->getBody();
     $token  = $request->getHeaderLine('token');
 
     $db = $this->get('PDO');
     if ($db->isAuthorized($token)) {
         $dbInstance = $db->getDB();
-
-        $res = createNewOrder($dbInstance, $params);
+        $res = createNewOrder($dbInstance, (array)json_decode($params));
 
         return $response->withStatus(HTTP_OK);
     } else {
