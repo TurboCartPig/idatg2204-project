@@ -12,6 +12,7 @@ require_once '../src/endpoints/customer.php';
 require_once '../src/endpoints/customerRep.php';
 require_once '../src/endpoints/transporters.php';
 require_once '../src/endpoints/public.php';
+require_once '../src/constants.php';
 
 header('Content-Type: application/json');
 $container = new Container();
@@ -39,12 +40,12 @@ $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Resp
         $res = fetchOrders($dbInstance, $employeeID);
 
         $response->getBody()->write(json_encode($res));
+        return $response;
     } else {
-        $response->getBody()->write("User not authorized!");
-        return $response->withStatus(401);
+        $response->getBody()->write(UNAUTHORIZED_TEXT);
+        return $response->withStatus(HTTP_UNAUTHORIZED);
     }
 
-    return $response;
 
 });
 
@@ -54,14 +55,20 @@ $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Resp
 $app->put('/customer_rep/{employee_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
     $employeeID = $args['employee_id'];
     $orderNumber = $args['order_number'];
+    $token      = $request->getHeaderLine('token');
 
     $db = $this->get('PDO');
-    $dbInstance = $db->getDB();
+    if ($db->isAuthorized($token)) {
+        $dbInstance = $db->getDB();
 
-    $res = updateOrderState($dbInstance, $employeeID, $orderNumber);
+        $res = updateOrderState($dbInstance, $employeeID, $orderNumber);
 
-    $response->getBody()->write($res['body']);
-    return $response->withStatus($res['status']);
+        $response->getBody()->write($res['body']);
+        return $response->withStatus($res['status']);
+    } else {
+        $response->getBody()->write(UNAUTHORIZED_TEXT);
+        return $response->withStatus(HTTP_UNAUTHORIZED);
+    }
 });
 
 /**
