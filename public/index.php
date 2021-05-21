@@ -205,20 +205,26 @@ $app->get('/transporters/shipments', function (Request $request, Response $respo
         $response->getBody()->write(UNAUTHORIZED_TEXT);
         return $response->withStatus(HTTP_UNAUTHORIZED);
     }
-
 });
 
 /**
  * Change the state of the shipment when it has been picked up.
  */
 $app->put('/transporters/shipments/{shipment_number}', function (Request $request, Response $response, array $args) {
-    $db = $this->get('PDO');
-    $dbInstance = $db->getDB();
+    $token = $request->getHeaderLine('token');
     $shipment_number = $args['shipment_number'];
 
-    changeShipmentState($dbInstance, $shipment_number, 1);
+    $db = $this->get('PDO');
+    if ($db->isAuthorized($token)) {
+        $dbInstance = $db->getDB();
 
-    return $response->withStatus(204);
+        changeShipmentState($dbInstance, $shipment_number, 1);
+
+        return $response->withStatus(204);
+    } else {
+        $response->getBody()->write(UNAUTHORIZED_TEXT);
+        return $response->withStatus(HTTP_UNAUTHORIZED);
+    }
 });
 
 /**
@@ -233,7 +239,6 @@ $app->get('/public/skis', function (Request $request, Response $response, array 
 
     $response->getBody()->write(json_encode($res));
     return $response;
-
 });
 
 $app->run();
