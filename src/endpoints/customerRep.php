@@ -9,6 +9,7 @@ function fetchOrders(PDO $dbInstance, mixed $employeeID): array
 {
 
     $res = array();
+    // We use SELECT * because we have created a custom view for this endpoint
     $query = "SELECT * FROM employee_orders
                 WHERE employee_number = :eid";
     $stmt = $dbInstance->prepare($query);
@@ -36,6 +37,7 @@ function updateOrderState(PDO $dbInstance, mixed $employeeID, mixed $orderNumber
     $res = array();
 
     // Check if the order is in the previous state, and only update if it is.
+    // We use SELECT * because we have created a custom view for this endpoint
     $query = "SELECT * FROM employee_orders
                 WHERE employee_number = :eid AND order_number = :onb AND order_state = :state";
     $stmt = $dbInstance->prepare($query);
@@ -82,6 +84,7 @@ function createShipment(PDO $dbInstance, mixed $employeeID, mixed $body)
     $dbInstance->beginTransaction();
 
     $res = array();
+    // We use SELECT * because we have created a custom view for this endpoint
     $query = "SELECT * FROM employee_orders
               WHERE employee_number = :eid AND order_number = :onb AND order_state = 3";
     $stmt = $dbInstance->prepare($query);

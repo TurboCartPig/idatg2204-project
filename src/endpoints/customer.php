@@ -64,7 +64,7 @@ function deleteOrder(PDO $dbInstance, int $customer_id, int $order_number) {
 function getProductionPlan(PDO $dbInstance): array
 {
     $res = array();
-    $query = "SELECT * FROM production_plan";
+    $query = "SELECT num_of_skies, ski_type, manager FROM production_plan";
     $stmt = $dbInstance->prepare($query);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
