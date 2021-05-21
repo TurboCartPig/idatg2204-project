@@ -45,8 +45,6 @@ $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Resp
         $response->getBody()->write(UNAUTHORIZED_TEXT);
         return $response->withStatus(HTTP_UNAUTHORIZED);
     }
-
-
 });
 
 /**
@@ -99,13 +97,13 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}/shipping', function
 $app->post('/customer_rep/{employee_id}/shipments', function (Request $request, Response $response, array $args) {
     $employeeID = $args['employee_id'];
     $token      = $request->getHeaderLine('token');
-    $body       = $request->getParsedBody();
+    $body       = $request->getBody();
 
     $db = $this->get('PDO');
     if ($db->isAuthorized($token)) {
         $dbInstance = $db->getDB();
 
-        $res = createShipment($dbInstance, $employeeID, $body);
+        $res = createShipment($dbInstance, $employeeID, (array)json_decode($body));
 
         $response->getBody()->write($res['body']);
         return $response->withStatus($res['status']);
