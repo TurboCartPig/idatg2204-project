@@ -1,5 +1,9 @@
 CREATE DATABASE IF NOT EXISTS db_project;
 
+CREATE TABLE IF NOT EXISTS db_project.auth_token
+(
+    token VARCHAR(100) NOT NULL PRIMARY KEY
+);
 
 CREATE TABLE IF NOT EXISTS db_project.temperature
 (
@@ -162,6 +166,10 @@ CREATE TABLE IF NOT EXISTS db_project.production_plan
     manager      INT NOT NULL REFERENCES employee (number),
     PRIMARY KEY (num_of_skies, ski_type)
 );
+
+INSERT INTO `auth_token` (`token`)
+VALUE ('customer_rep');
+
 
 INSERT INTO `customer` (`id`, `start_date`, `end_date`, `customer_rep`)
 VALUES (1, '2020-01-01', '2021-01-01', 2),

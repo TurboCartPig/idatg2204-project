@@ -27,4 +27,19 @@ class Database
     public function getDB(): PDO {
         return $this->db;
     }
+
+    /**
+     * @param string $token
+     * @return bool - Whether or not the user is authorized or not
+     */
+    public function isAuthorized(string $token): bool {
+        $query = 'SELECT COUNT(*) FROM auth_token where token = :token';
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':token',$token);
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_NUM);
+        return $row[0] != 0;
+    }
 }

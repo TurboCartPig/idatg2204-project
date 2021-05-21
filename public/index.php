@@ -28,14 +28,24 @@ $container->set('PDO', function () {
  */
 $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Response $response, array $args) {
     $employeeID = $args['employee_id'];
+    $token      = $request->getHeaderLine('token');
 
     $db = $this->get('PDO');
-    $dbInstance = $db->getDB();
 
-    $res = fetchOrders($dbInstance,$employeeID);
+    if ($db->isAuthorized($token)) {
 
-    $response->getBody()->write(json_encode($res));
+        $dbInstance = $db->getDB();
+
+        $res = fetchOrders($dbInstance, $employeeID);
+
+        $response->getBody()->write(json_encode($res));
+    } else {
+        $response->withStatus(401);
+        $response->getBody()->write("User not authorized!");
+    }
+
     return $response;
+
 });
 
 /**
@@ -48,7 +58,7 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}', function (Request
     $db = $this->get('PDO');
     $dbInstance = $db->getDB();
 
-    $res = updateOrderState($dbInstance,$employeeID,$orderNumber);
+    $res = updateOrderState($dbInstance, $employeeID, $orderNumber);
 
     $response->withStatus($res['status']);
     $response->getBody()->write($res['body']);

@@ -7,6 +7,7 @@
  */
 function fetchOrders(PDO $dbInstance, mixed $employeeID): array
 {
+
     $res = array();
     $query = "SELECT * FROM employee_orders
                 WHERE employee_number = :eid";
