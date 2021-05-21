@@ -126,13 +126,9 @@ $app->get('/customers/{customer_id}/orders', function (Request $request, Respons
 /**
  * Place a new order.
  */
-$app->post('/customers/{customer_id}/orders', function (Request $request, Response $response, array $args) {
+$app->post('/customers/orders', function (Request $request, Response $response, array $args) {
     $params = $request->getParsedBody();
     $token  = $request->getHeaderLine('token');
-
-    // What does this code even do????
-    $response->getBody()->write(json_encode($params));
-    //
 
     $db = $this->get('PDO');
     if ($db->isAuthorized($token)) {
@@ -140,8 +136,7 @@ $app->post('/customers/{customer_id}/orders', function (Request $request, Respon
 
         $res = createNewOrder($dbInstance, $params);
 
-        $response->getBody()->write(json_encode($res));
-        return $response;
+        return $response->withStatus(HTTP_OK);
     } else {
         $response->getBody()->write(UNAUTHORIZED_TEXT);
         return $response->withStatus(HTTP_UNAUTHORIZED);
