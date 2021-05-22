@@ -24,7 +24,7 @@ function fetchOrders(PDO $dbInstance, mixed $employeeID): array
         $sub_stmt->bindValue(":order_num",$row['order_number']);
         $sub_stmt->execute();
         while ($sub_row = $sub_stmt->fetch(PDO::FETCH_ASSOC)) {
-            $res[$row['order_number']]['skis_in_order'] = $sub_row;
+            $res[$row['order_number']]['skis_in_order'][] = $sub_row;
         }
     }
     return $res;

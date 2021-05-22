@@ -40,7 +40,10 @@ function createNewOrder(PDO $dbInstance, array $params): array
     $stmt->execute();
 
     $inserted_order = $stmt->fetch(PDO::FETCH_ASSOC); // We know there will only be 1 row
-    $ski_query = "INSERT INTO `skis_in_order`"
+    $ski_query = "INSERT INTO `skis_in_order` (order_number,ski_id,quantity)
+                  VALUES (:order_num,:ski_id,:quantity)";
+
+
 }
 
 /**
