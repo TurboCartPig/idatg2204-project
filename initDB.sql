@@ -200,7 +200,8 @@ VALUES (1, 2, 1, 1, 120400, 2),
 INSERT INTO `order_state` (`id`, `state`)
 VALUES (1, 'New'),
        (2, 'Open'),
-       (3, 'Ready for shipping');
+       (3, 'Filled'),
+       (4, 'Shipped');
 
 
 INSERT INTO `production_plan` (`num_of_skies`, `ski_type`, `manager`)

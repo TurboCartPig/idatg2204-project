@@ -70,9 +70,9 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}/open', function (Re
 });
 
 /**
- * Changing the state of an order from open to shipping.
+ * Changing the state of an order from open to filled.
  */
-$app->put('/customer_rep/{employee_id}/orders/{order_number}/shipping', function (Request $request, Response $response, array $args) {
+$app->put('/customer_rep/{employee_id}/orders/{order_number}/filled', function (Request $request, Response $response, array $args) {
     $employeeID = $args['employee_id'];
     $orderNumber = $args['order_number'];
     $token      = $request->getHeaderLine('token');
@@ -92,7 +92,7 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}/shipping', function
 });
 
 /**
- * Create a shipment request when an order has been filled
+ * Create a shipment request when an order has been filled.
  */
 $app->post('/customer_rep/{employee_id}/shipments', function (Request $request, Response $response, array $args) {
     $employeeID = $args['employee_id'];
@@ -185,7 +185,7 @@ $app->delete('/customers/{customer_id}/orders/{order_number}', function (Request
 /**
  * Request that an order being split; on such a request, the unfilled items in the
  * order is moved to a new order (set in the open state), and the existing order is
- * changed from the skies available to ready for shipment state.
+ * changed from open to filled.
  */
 $app->patch('/customers/{customer_id}/orders/{order_number}', function (Request $request, Response $response, array $args) {
     //TODO: Implement this endpoint
@@ -212,7 +212,7 @@ $app->get('/customers/summary', function (Request $request, Response $response, 
 });
 
 /**
- * Retrieve information about orders being ready for shipment
+ * Retrieve information about shipments.
  */
 $app->get('/transporters/shipments', function (Request $request, Response $response, array $args) {
     $token = $request->getHeaderLine('token');
