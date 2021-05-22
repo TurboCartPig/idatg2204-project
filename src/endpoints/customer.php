@@ -40,7 +40,7 @@ function createNewOrder(PDO $dbInstance, array $params): array
     $stmt->execute();
 
     $inserted_order = $stmt->fetch(PDO::FETCH_ASSOC); // We know there will only be 1 row
-    $ski_query = "INSERT INTO `skis_in_order`"
+    $ski_query = "INSERT INTO `skis_in_order`";
 }
 
 /**
@@ -61,7 +61,7 @@ function deleteOrder(PDO $dbInstance, int $customer_id, int $order_number) {
     }
 
     // Delete skiis in order for this order
-    $query = "DELETE FROM skiis_in_order WHERE order_number = :order_number"
+    $query = "DELETE FROM skiis_in_order WHERE order_number = :order_number";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":order_number", $order_number);
     $stmt->execute();
