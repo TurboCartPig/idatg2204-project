@@ -51,10 +51,10 @@ CREATE TABLE IF NOT EXISTS db_project.ski
     historical  BOOLEAN,
     photo       LONGBLOB,
     msrp        INT         NOT NULL,
-    type        INT         NOT NULL REFERENCES ski_type (type_id) ON UPDATE CASCADE ON DELETE NO ACTION,
-    model       INT         NOT NULL REFERENCES ski_model (model_id) ON UPDATE CASCADE ON DELETE NO ACTION,
-    weight      INT         NOT NULL REFERENCES weight_class (class_id) ON UPDATE CASCADE ON DELETE NO ACTION,
-    size        INT         NOT NULL REFERENCES size_class (class_id) ON UPDATE CASCADE ON DELETE NO ACTION
+    type        INT         NOT NULL REFERENCES ski_type (id) ON UPDATE CASCADE ON DELETE NO ACTION,
+    model       INT         NOT NULL REFERENCES ski_model (id) ON UPDATE CASCADE ON DELETE NO ACTION,
+    weight      INT         NOT NULL REFERENCES weight_class (id) ON UPDATE CASCADE ON DELETE NO ACTION,
+    size        INT         NOT NULL REFERENCES size_class (id) ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
 
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS db_project.orders
 CREATE TABLE IF NOT EXISTS db_project.skiis_in_order
 (
     order_number INT NOT NULL REFERENCES `orders` (order_number) ON UPDATE CASCADE ON DELETE NO ACTION,
-    ski_id       INT NOT NULL REFERENCES ski (ski_id) ON UPDATE CASCADE ON DELETE NO ACTION,
+    ski_id       INT NOT NULL REFERENCES ski (id) ON UPDATE CASCADE ON DELETE NO ACTION,
     quantity     INT NOT NULL,
     PRIMARY KEY (order_number, ski_id)
 );
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS db_project.shipment
     pickup_date     DATE NOT NULL,
     shipment_state  INT  NOT NULL REFERENCES shipment_state (id) ON UPDATE NO ACTION ON DELETE NO ACTION, -- Can not modify shipment_state values live
     order_number    INT  NOT NULL REFERENCES `orders` (order_number) ON UPDATE CASCADE ON DELETE NO ACTION, -- Can not cancel order after shipment has been created
-    transporter_id  INT  NOT NULL REFERENCES transporter (company_id) ON UPDATE CASCADE ON DELETE NO ACTION,
+    transporter_id  INT  NOT NULL REFERENCES transporter (id) ON UPDATE CASCADE ON DELETE NO ACTION,
     driver_id       INT  NOT NULL
 );
 
@@ -166,7 +166,7 @@ CREATE TABLE IF NOT EXISTS db_project.teams_skier
 CREATE TABLE IF NOT EXISTS db_project.production_plan
 (
     num_of_skies INT NOT NULL,
-    ski_type     INT NOT NULL REFERENCES ski_type (type_id) ON UPDATE CASCADE ON DELETE NO ACTION,
+    ski_type     INT NOT NULL REFERENCES ski_type (id) ON UPDATE CASCADE ON DELETE NO ACTION,
     manager      INT REFERENCES employee (number) ON UPDATE CASCADE ON DELETE SET NULL,
     PRIMARY KEY (num_of_skies, ski_type)
 );
@@ -207,7 +207,7 @@ INSERT INTO `production_plan` (`num_of_skies`, `ski_type`, `manager`)
 VALUES (200, 2, 1),
        (500, 1, 1);
 
-INSERT INTO `ski_type` (`type_id`, `name`)
+INSERT INTO `ski_type` (`id`, `name`)
 VALUES (1, 'classic'),
        (2, 'sprint');
 
@@ -219,7 +219,7 @@ INSERT INTO `address` (`id`, `street`, `number`, `postal_code`, `city`) VALUES
 (1, 'Sverre Iversens Vei ', '31', '0972', 'Oslo'), 
 (2, 'Begnaveien', '19', '3517', 'Honefoss');
 
-INSERT INTO `transporter` (`company_id`, `name`) VALUES 
+INSERT INTO `transporter` (`id`, `name`) VALUES
 (1, 'Bring'), 
 (2, 'Bring2');
 
@@ -272,5 +272,5 @@ SELECT shipment_number, order_number, pickup_date, street, number, postal_code, 
 FROM shipment
 INNER JOIN shipment_state ON shipment.shipment_state = shipment_state.id
 INNER JOIN address ON address.id = address_id
-INNER JOIN transporter ON transporter.company_id = transporter_id
+INNER JOIN transporter ON transporter.id = transporter_id
 WHERE shipment_state.state = 'Ready';

@@ -29,7 +29,7 @@ function getOrdersForCustomer(PDO $dbInstance, mixed $customerID): array
 function createNewOrder(PDO $dbInstance, array $params): array
 {
     $res = array();
-    $query = "INSERT INTO orders (total_price, customer_rep, order_state, customer_id)
+    $query = "INSERT INTO orders (total_price, customer_rep, order_state, id)
               VALUES (:price,:cus_rep,1,:cid)";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":price", $params['price']);
@@ -50,7 +50,7 @@ function createNewOrder(PDO $dbInstance, array $params): array
  * @param int $order_number
  */
 function deleteOrder(PDO $dbInstance, int $customer_id, int $order_number) {
-    $query = "SELECT COUNT(*) FROM orders WHERE order_number = :order_number AND customer_id = :customer_id";
+    $query = "SELECT COUNT(*) FROM orders WHERE order_number = :order_number AND id = :customer_id";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":customer_id", $customer_id);
     $stmt->bindValue(":order_number", $order_number);
@@ -60,7 +60,7 @@ function deleteOrder(PDO $dbInstance, int $customer_id, int $order_number) {
         throw new RuntimeException("Order does not exist or is not associated with this customer id");
     }
 
-    $query = "DELETE FROM orders WHERE order_number = :order_number AND customer_id = :customer_id";
+    $query = "DELETE FROM orders WHERE order_number = :order_number AND id = :customer_id";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":customer_id", $customer_id);
     $stmt->bindValue(":order_number", $order_number);
