@@ -7,42 +7,44 @@ CREATE TABLE IF NOT EXISTS db_project.auth_token
 
 CREATE TABLE IF NOT EXISTS db_project.temperature
 (
-    temp VARCHAR(10) NOT NULL PRIMARY KEY
+    id              INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    temp            VARCHAR(10) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS db_project.grip_system
 (
-    grip VARCHAR(50) NOT NULL PRIMARY KEY
+    id              INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    grip            VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS db_project.ski_model
 (
-    model_id INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id       INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name     VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS db_project.ski_type
 (
-    type_id INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id      INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name    VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS db_project.weight_class
 (
-    class_id   INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id         INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     min_weight INT NOT NULL,
     max_weight INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS db_project.size_class
 (
-    class_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id       INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     size     INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS db_project.ski
 (
-    ski_id      INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id          INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     temp_class  VARCHAR(10) NOT NULL REFERENCES temperature (temp) ON UPDATE CASCADE ON DELETE NO ACTION,
     grip        VARCHAR(50) NOT NULL REFERENCES grip_system (grip) ON UPDATE CASCADE ON DELETE NO ACTION,
     description VARCHAR(500),
@@ -82,7 +84,7 @@ CREATE TABLE IF NOT EXISTS db_project.skiis_in_order
 
 CREATE TABLE IF NOT EXISTS db_project.transporter
 (
-    company_id INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id         INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name       VARCHAR(50) NOT NULL
 );
 

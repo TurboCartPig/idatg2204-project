@@ -7,7 +7,6 @@
  */
 function fetchOrders(PDO $dbInstance, mixed $employeeID): array
 {
-
     $res = array();
     // We use SELECT * because we have created a custom view for this endpoint
     $query = "SELECT * FROM employee_orders
