@@ -28,9 +28,12 @@ class CustomerTest extends \Codeception\Test\Unit
     // tests
     public function testOrderCreation()
     {
-        $body['price'] = '256000';
         $body['customer_rep'] = '2';
         $body['customer_id'] = '3';
+
+        $ski['ski_id'] = "3";
+        $ski['quantity'] = "50";
+        $body['skis_in_order'][] = $ski;
 
         $res = createNewOrder($this->db->getDB(), $body);
 
