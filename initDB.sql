@@ -186,19 +186,20 @@ INSERT INTO `employee_role` (`id`, `role`)
 VALUES (1, 'manager');
 
 INSERT INTO `orders` (`order_number`, `parent_number`, `customer_id`, `customer_rep`, `total_price`, `order_state`)
-VALUES (1, 2, 1, 1, 120000, 2),
-       (2, 2, 1, 1, 234000, 3),
-       (3, 1, 2, 1, 320000, 1),
-       (4, 1, 2, 1, 120000, 2),
-       (5, 3, 3, 1, 410000, 3),
-       (6, 3, 3, 1, 120000, 2),
-       (7, 4, 4, 1, 210000, 1),
-       (8, 4, 4, 1, 110000, 2);
+VALUES (1, 2, 1, 1, 120400, 2),
+       (2, 2, 1, 1, 267730, 3),
+       (3, 3, 2, 1, 147000, 1),
+       (4, 3, 2, 1, 136500, 2),
+       (5, 5, 3, 1, 130600, 3),
+       (6, 5, 3, 1, 269500, 2),
+       (7, 7, 4, 1, 351000, 1),
+       (8, 7, 4, 1, 326500, 2);
 
 INSERT INTO `order_state` (`id`, `state`)
 VALUES (1, 'New'),
        (2, 'Open'),
        (3, 'Ready for shipping');
+
 
 INSERT INTO `production_plan` (`num_of_skies`, `ski_type`, `manager`)
 VALUES (200, 2, 1),
@@ -244,6 +245,18 @@ VALUES ('cold','skin','Unisex model released in 2021',FALSE,4900,2,3,6,8),
        ('warm','plain','Male model released in 2021',FALSE,6530,2,3,8,9),
        ('cold','skin','Woman model released in 2021',FALSE,4300,2,2,5,6),
        ('cold','skin','Unisex model released in 2020',FALSE,3900,2,3,6,8);
+
+
+INSERT INTO `skiis_in_order` (`order_number`,`ski_id`,`quantity`)
+VALUES (1,3,28),
+       (2,2,41),
+       (3,1,30),
+       (4,4,35),
+       (5,2,20),
+       (6,1,55),
+       (7,4,90),
+       (8,2,50);
+
 
 -- Create a view of the orders table, from the perspective of the employees.
 CREATE VIEW employee_orders AS
