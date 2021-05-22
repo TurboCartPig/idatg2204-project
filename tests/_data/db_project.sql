@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 25. Apr, 2021 22:08 PM
+-- Generation Time: 22. Mai, 2021 19:33 PM
 -- Tjener-versjon: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -46,6 +46,40 @@ INSERT INTO `address` (`id`, `street`, `number`, `postal_code`, `city`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Tabellstruktur for tabell `auth_token`
+--
+
+CREATE TABLE `auth_token` (
+  `token` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dataark for tabell `auth_token`
+--
+
+INSERT INTO `auth_token` (`token`) VALUES
+('customer_rep');
+
+-- --------------------------------------------------------
+
+--
+-- Erstatningsstruktur for visning `complete_orders`
+-- (See below for the actual view)
+--
+CREATE TABLE IF NOT EXISTS `complete_orders` (
+`order_number` int(11)
+,`ski_id` int(11)
+,`quantity` int(11)
+,`total_price` int(11)
+,`parent_number` int(11)
+,`customer_id` int(11)
+,`customer_rep` int(11)
+,`order_state` int(11)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Tabellstruktur for tabell `customer`
 --
 
@@ -53,7 +87,7 @@ CREATE TABLE `customer` (
   `id` int(11) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
-  `customer_rep` int(11) NOT NULL
+  `customer_rep` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -102,6 +136,21 @@ INSERT INTO `employee` (`number`, `name`, `role`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Erstatningsstruktur for visning `employee_orders`
+-- (See below for the actual view)
+--
+CREATE TABLE IF NOT EXISTS `employee_orders` (
+`employee_number` int(11)
+,`order_number` int(11)
+,`customer_id` int(11)
+,`customer_rep` int(11)
+,`total_price` int(11)
+,`order_state` int(11)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Tabellstruktur for tabell `employee_role`
 --
 
@@ -124,6 +173,7 @@ INSERT INTO `employee_role` (`id`, `role`) VALUES
 --
 
 CREATE TABLE `grip_system` (
+  `id` int(11) NOT NULL,
   `grip` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -131,9 +181,9 @@ CREATE TABLE `grip_system` (
 -- Dataark for tabell `grip_system`
 --
 
-INSERT INTO `grip_system` (`grip`) VALUES
-('plain'),
-('skin');
+INSERT INTO `grip_system` (`id`, `grip`) VALUES
+(1, 'skin'),
+(2, 'plain');
 
 -- --------------------------------------------------------
 
@@ -161,7 +211,7 @@ CREATE TABLE `orders` (
   `customer_id` int(11) DEFAULT NULL,
   `customer_rep` int(11) DEFAULT NULL,
   `total_price` int(11) NOT NULL,
-  `order_state` varchar(50) DEFAULT NULL
+  `order_state` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -169,14 +219,14 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`order_number`, `parent_number`, `customer_id`, `customer_rep`, `total_price`, `order_state`) VALUES
-(1, 2, 1, 1, 120000, 'In production'),
-(2, 2, 1, 1, 234000, 'Ready for shipping'),
-(3, 1, 2, 1, 320000, 'In production'),
-(4, 1, 2, 1, 120000, 'Ready for shipping'),
-(5, 3, 3, 1, 410000, 'In production'),
-(6, 3, 3, 1, 120000, 'Ready for shipping'),
-(7, 4, 4, 1, 210000, 'In production'),
-(8, 4, 4, 1, 110000, 'Ready for shipping');
+(1, 2, 1, 1, 120400, 2),
+(2, 2, 1, 1, 267730, 3),
+(3, 3, 2, 1, 147000, 1),
+(4, 3, 2, 1, 136500, 2),
+(5, 5, 3, 1, 130600, 3),
+(6, 5, 3, 1, 269500, 2),
+(7, 7, 4, 1, 351000, 1),
+(8, 7, 4, 1, 326500, 2);
 
 -- --------------------------------------------------------
 
@@ -185,6 +235,7 @@ INSERT INTO `orders` (`order_number`, `parent_number`, `customer_id`, `customer_
 --
 
 CREATE TABLE `order_state` (
+  `id` int(11) NOT NULL,
   `state` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -192,9 +243,11 @@ CREATE TABLE `order_state` (
 -- Dataark for tabell `order_state`
 --
 
-INSERT INTO `order_state` (`state`) VALUES
-('In production'),
-('Ready for shipping');
+INSERT INTO `order_state` (`id`, `state`) VALUES
+(1, 'New'),
+(2, 'Open'),
+(3, 'Filled'),
+(4, 'Shipped');
 
 -- --------------------------------------------------------
 
@@ -205,7 +258,7 @@ INSERT INTO `order_state` (`state`) VALUES
 CREATE TABLE `production_plan` (
   `num_of_skies` int(11) NOT NULL,
   `ski_type` int(11) NOT NULL,
-  `manager` int(11) NOT NULL
+  `manager` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -215,6 +268,24 @@ CREATE TABLE `production_plan` (
 INSERT INTO `production_plan` (`num_of_skies`, `ski_type`, `manager`) VALUES
 (200, 2, 1),
 (500, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Erstatningsstruktur for visning `ready_shipments`
+-- (See below for the actual view)
+--
+CREATE TABLE IF NOT EXISTS `ready_shipments` (
+`shipment_number` int(11)
+,`order_number` int(11)
+,`pickup_date` date
+,`street` varchar(50)
+,`number` int(11)
+,`postal_code` int(11)
+,`city` varchar(50)
+,`state` varchar(50)
+,`name` varchar(50)
+);
 
 -- --------------------------------------------------------
 
@@ -266,7 +337,7 @@ INSERT INTO `shipment_state` (`id`, `state`) VALUES
 --
 
 CREATE TABLE `size_class` (
-  `class_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `size` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -274,7 +345,7 @@ CREATE TABLE `size_class` (
 -- Dataark for tabell `size_class`
 --
 
-INSERT INTO `size_class` (`class_id`, `size`) VALUES
+INSERT INTO `size_class` (`id`, `size`) VALUES
 (1, 135),
 (2, 140),
 (3, 145),
@@ -297,7 +368,7 @@ INSERT INTO `size_class` (`class_id`, `size`) VALUES
 --
 
 CREATE TABLE `ski` (
-  `ski_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `temp_class` varchar(10) NOT NULL,
   `grip` varchar(50) NOT NULL,
   `description` varchar(500) DEFAULT NULL,
@@ -314,7 +385,7 @@ CREATE TABLE `ski` (
 -- Dataark for tabell `ski`
 --
 
-INSERT INTO `ski` (`ski_id`, `temp_class`, `grip`, `description`, `historical`, `photo`, `msrp`, `type`, `model`, `weight`, `size`) VALUES
+INSERT INTO `ski` (`id`, `temp_class`, `grip`, `description`, `historical`, `photo`, `msrp`, `type`, `model`, `weight`, `size`) VALUES
 (1, 'cold', 'skin', 'Unisex model released in 2021', 0, NULL, 4900, 2, 3, 6, 8),
 (2, 'warm', 'plain', 'Male model released in 2021', 0, NULL, 6530, 2, 3, 8, 9),
 (3, 'cold', 'skin', 'Woman model released in 2021', 0, NULL, 4300, 2, 2, 5, 6),
@@ -323,14 +394,28 @@ INSERT INTO `ski` (`ski_id`, `temp_class`, `grip`, `description`, `historical`, 
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `skiis_in_order`
+-- Tabellstruktur for tabell `skis_in_order`
 --
 
-CREATE TABLE `skiis_in_order` (
+CREATE TABLE `skis_in_order` (
   `order_number` int(11) NOT NULL,
   `ski_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dataark for tabell `skis_in_order`
+--
+
+INSERT INTO `skis_in_order` (`order_number`, `ski_id`, `quantity`) VALUES
+(1, 3, 28),
+(2, 2, 41),
+(3, 1, 30),
+(4, 4, 35),
+(5, 2, 20),
+(6, 1, 55),
+(7, 4, 90),
+(8, 2, 50);
 
 -- --------------------------------------------------------
 
@@ -339,7 +424,7 @@ CREATE TABLE `skiis_in_order` (
 --
 
 CREATE TABLE `ski_model` (
-  `model_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -347,7 +432,7 @@ CREATE TABLE `ski_model` (
 -- Dataark for tabell `ski_model`
 --
 
-INSERT INTO `ski_model` (`model_id`, `name`) VALUES
+INSERT INTO `ski_model` (`id`, `name`) VALUES
 (1, 'Superspeed 2000'),
 (2, 'Superspeed 3000'),
 (3, 'Superspeed 4000');
@@ -359,7 +444,7 @@ INSERT INTO `ski_model` (`model_id`, `name`) VALUES
 --
 
 CREATE TABLE `ski_type` (
-  `type_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -367,7 +452,7 @@ CREATE TABLE `ski_type` (
 -- Dataark for tabell `ski_type`
 --
 
-INSERT INTO `ski_type` (`type_id`, `name`) VALUES
+INSERT INTO `ski_type` (`id`, `name`) VALUES
 (1, 'classic'),
 (2, 'sprint');
 
@@ -391,6 +476,7 @@ CREATE TABLE `teams_skier` (
 --
 
 CREATE TABLE `temperature` (
+  `id` int(11) NOT NULL,
   `temp` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -398,9 +484,9 @@ CREATE TABLE `temperature` (
 -- Dataark for tabell `temperature`
 --
 
-INSERT INTO `temperature` (`temp`) VALUES
-('cold'),
-('warm');
+INSERT INTO `temperature` (`id`, `temp`) VALUES
+(1, 'warm'),
+(2, 'cold');
 
 -- --------------------------------------------------------
 
@@ -409,7 +495,7 @@ INSERT INTO `temperature` (`temp`) VALUES
 --
 
 CREATE TABLE `transporter` (
-  `company_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -417,7 +503,7 @@ CREATE TABLE `transporter` (
 -- Dataark for tabell `transporter`
 --
 
-INSERT INTO `transporter` (`company_id`, `name`) VALUES
+INSERT INTO `transporter` (`id`, `name`) VALUES
 (1, 'Bring'),
 (2, 'Bring2');
 
@@ -428,7 +514,7 @@ INSERT INTO `transporter` (`company_id`, `name`) VALUES
 --
 
 CREATE TABLE `weight_class` (
-  `class_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `min_weight` int(11) NOT NULL,
   `max_weight` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -437,7 +523,7 @@ CREATE TABLE `weight_class` (
 -- Dataark for tabell `weight_class`
 --
 
-INSERT INTO `weight_class` (`class_id`, `min_weight`, `max_weight`) VALUES
+INSERT INTO `weight_class` (`id`, `min_weight`, `max_weight`) VALUES
 (1, 20, 25),
 (2, 25, 30),
 (3, 30, 40),
@@ -448,6 +534,33 @@ INSERT INTO `weight_class` (`class_id`, `min_weight`, `max_weight`) VALUES
 (8, 90, 110),
 (9, 110, 130);
 
+-- --------------------------------------------------------
+
+--
+-- Visningsstruktur `complete_orders`
+--
+DROP TABLE IF EXISTS `complete_orders`;
+
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `complete_orders`  AS SELECT `sio`.`order_number` AS `order_number`, `sio`.`ski_id` AS `ski_id`, `sio`.`quantity` AS `quantity`, `o`.`total_price` AS `total_price`, `o`.`parent_number` AS `parent_number`, `o`.`customer_id` AS `customer_id`, `o`.`customer_rep` AS `customer_rep`, `o`.`order_state` AS `order_state` FROM (`skis_in_order` `sio` left join `orders` `o` on(`sio`.`order_number` = `o`.`order_number`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Visningsstruktur `employee_orders`
+--
+DROP TABLE IF EXISTS `employee_orders`;
+
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `employee_orders`  AS SELECT `employee`.`number` AS `employee_number`, `orders`.`order_number` AS `order_number`, `orders`.`customer_id` AS `customer_id`, `orders`.`customer_rep` AS `customer_rep`, `orders`.`total_price` AS `total_price`, `orders`.`order_state` AS `order_state` FROM (`orders` join `employee` on(`employee`.`number` = `orders`.`customer_rep`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Visningsstruktur `ready_shipments`
+--
+DROP TABLE IF EXISTS `ready_shipments`;
+
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `ready_shipments`  AS SELECT `shipment`.`shipment_number` AS `shipment_number`, `shipment`.`order_number` AS `order_number`, `shipment`.`pickup_date` AS `pickup_date`, `address`.`street` AS `street`, `address`.`number` AS `number`, `address`.`postal_code` AS `postal_code`, `address`.`city` AS `city`, `shipment_state`.`state` AS `state`, `transporter`.`name` AS `name` FROM (((`shipment` join `shipment_state` on(`shipment`.`shipment_state` = `shipment_state`.`id`)) join `address` on(`address`.`id` = `shipment`.`address_id`)) join `transporter` on(`transporter`.`id` = `shipment`.`transporter_id`)) WHERE `shipment_state`.`state` = 'Ready' ;
+
 --
 -- Indexes for dumped tables
 --
@@ -457,6 +570,12 @@ INSERT INTO `weight_class` (`class_id`, `min_weight`, `max_weight`) VALUES
 --
 ALTER TABLE `address`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `auth_token`
+--
+ALTER TABLE `auth_token`
+  ADD PRIMARY KEY (`token`);
 
 --
 -- Indexes for table `customer`
@@ -486,7 +605,7 @@ ALTER TABLE `employee_role`
 -- Indexes for table `grip_system`
 --
 ALTER TABLE `grip_system`
-  ADD PRIMARY KEY (`grip`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `individual_store`
@@ -504,7 +623,7 @@ ALTER TABLE `orders`
 -- Indexes for table `order_state`
 --
 ALTER TABLE `order_state`
-  ADD PRIMARY KEY (`state`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `production_plan`
@@ -528,31 +647,31 @@ ALTER TABLE `shipment_state`
 -- Indexes for table `size_class`
 --
 ALTER TABLE `size_class`
-  ADD PRIMARY KEY (`class_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `ski`
 --
 ALTER TABLE `ski`
-  ADD PRIMARY KEY (`ski_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `skiis_in_order`
+-- Indexes for table `skis_in_order`
 --
-ALTER TABLE `skiis_in_order`
+ALTER TABLE `skis_in_order`
   ADD PRIMARY KEY (`order_number`,`ski_id`);
 
 --
 -- Indexes for table `ski_model`
 --
 ALTER TABLE `ski_model`
-  ADD PRIMARY KEY (`model_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `ski_type`
 --
 ALTER TABLE `ski_type`
-  ADD PRIMARY KEY (`type_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `teams_skier`
@@ -564,19 +683,19 @@ ALTER TABLE `teams_skier`
 -- Indexes for table `temperature`
 --
 ALTER TABLE `temperature`
-  ADD PRIMARY KEY (`temp`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `transporter`
 --
 ALTER TABLE `transporter`
-  ADD PRIMARY KEY (`company_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `weight_class`
 --
 ALTER TABLE `weight_class`
-  ADD PRIMARY KEY (`class_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -607,10 +726,22 @@ ALTER TABLE `employee_role`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `grip_system`
+--
+ALTER TABLE `grip_system`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
   MODIFY `order_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `order_state`
+--
+ALTER TABLE `order_state`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `shipment`
@@ -628,37 +759,43 @@ ALTER TABLE `shipment_state`
 -- AUTO_INCREMENT for table `size_class`
 --
 ALTER TABLE `size_class`
-  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `ski`
 --
 ALTER TABLE `ski`
-  MODIFY `ski_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `ski_model`
 --
 ALTER TABLE `ski_model`
-  MODIFY `model_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `ski_type`
 --
 ALTER TABLE `ski_type`
-  MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `temperature`
+--
+ALTER TABLE `temperature`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `transporter`
 --
 ALTER TABLE `transporter`
-  MODIFY `company_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `weight_class`
 --
 ALTER TABLE `weight_class`
-  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
