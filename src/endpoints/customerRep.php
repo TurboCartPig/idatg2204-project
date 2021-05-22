@@ -106,9 +106,25 @@ function createShipment(PDO $dbInstance, mixed $employeeID, mixed $body)
 
     // If there is not exactly ONE order matched by the above statement, then something is wrong.
     if (count($res) != 1) {
-        $dbInstance->commit();
         $data['body'] = "The order is either not associated with this employee, it does not exits, or it is not ready for shipping";
         $data['status'] = 400;
+        return $data;
+    }
+
+    // Update order to shipped
+    $query = "UPDATE orders 
+                SET orders.order_state = 4
+                WHERE orders.order_number = :onb";
+    $stmt = $dbInstance->prepare($query);
+    $stmt->bindValue(":onb", $body['order_number']);
+
+    // Try to execute query, but if it fails, rollback the entire transaction
+    try {
+        $stmt->execute();
+    } catch (PDOException) {
+        $dbInstance->rollback();
+        $data['body'] = "Execution occurred in the database";
+        $data['status'] = 500;
         return $data;
     }
 
@@ -126,13 +142,14 @@ function createShipment(PDO $dbInstance, mixed $employeeID, mixed $body)
 
     try {
         $stmt->execute();
-        $dbInstance->commit();
-    } catch (PDOException $excpet) {
+    } catch (PDOException) {
+        $dbInstance->rollback();
         $data['body'] = "Exception occurred in the database";
-        $data['status'] = 400;
+        $data['status'] = 500;
         return $data;
     }
 
+    $dbInstance->commit();
     $data['body'] = "";
     $data['status'] = 204;
     return $data;
