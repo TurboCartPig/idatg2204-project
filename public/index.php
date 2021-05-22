@@ -4,15 +4,14 @@ use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
+use DBProject\Database\Database;
+use DBProject\Constants;
 
 require __DIR__ . '/../vendor/autoload.php';
-require_once '../src/database/Database.php';
-require_once '../src/database/dbCredentials.php';
 require_once '../src/endpoints/customer.php';
 require_once '../src/endpoints/customerRep.php';
 require_once '../src/endpoints/transporters.php';
 require_once '../src/endpoints/public.php';
-require_once '../src/constants.php';
 
 header('Content-Type: application/json');
 $container = new Container();
@@ -42,8 +41,8 @@ $app->get('/customer_rep/{employee_id}/orders', function (Request $request, Resp
         $response->getBody()->write(json_encode($res));
         return $response;
     } else {
-        $response->getBody()->write(UNAUTHORIZED_TEXT);
-        return $response->withStatus(HTTP_UNAUTHORIZED);
+        $response->getBody()->write(Constants::UNAUTHORIZED_TEXT);
+        return $response->withStatus(Constants::HTTP_UNAUTHORIZED);
     }
 });
 
@@ -64,8 +63,8 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}/open', function (Re
         $response->getBody()->write($res['body']);
         return $response->withStatus($res['status']);
     } else {
-        $response->getBody()->write(UNAUTHORIZED_TEXT);
-        return $response->withStatus(HTTP_UNAUTHORIZED);
+        $response->getBody()->write(Constants::UNAUTHORIZED_TEXT);
+        return $response->withStatus(Constants::HTTP_UNAUTHORIZED);
     }
 });
 
@@ -86,8 +85,8 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}/filled', function (
         $response->getBody()->write($res['body']);
         return $response->withStatus($res['status']);
     } else {
-        $response->getBody()->write(UNAUTHORIZED_TEXT);
-        return $response->withStatus(HTTP_UNAUTHORIZED);
+        $response->getBody()->write(Constants::UNAUTHORIZED_TEXT);
+        return $response->withStatus(Constants::HTTP_UNAUTHORIZED);
     }
 });
 
@@ -109,8 +108,8 @@ $app->post('/customer_rep/{employee_id}/shipments', function (Request $request, 
         $response->getBody()->write($res['body']);
         return $response->withStatus($res['status']);
     } else {
-        $response->getBody()->write(UNAUTHORIZED_TEXT);
-        return $response->withStatus(HTTP_UNAUTHORIZED);
+        $response->getBody()->write(Constants::UNAUTHORIZED_TEXT);
+        return $response->withStatus(Constants::HTTP_UNAUTHORIZED);
     }
 });
 
@@ -132,8 +131,8 @@ $app->get('/customers/{customer_id}/orders', function (Request $request, Respons
         $response->getBody()->write(json_encode($res));
         return $response;
     } else {
-        $response->getBody()->write(UNAUTHORIZED_TEXT);
-        return $response->withStatus(HTTP_UNAUTHORIZED);
+        $response->getBody()->write(Constants::UNAUTHORIZED_TEXT);
+        return $response->withStatus(Constants::HTTP_UNAUTHORIZED);
     }
 });
 
@@ -149,10 +148,10 @@ $app->post('/customers/orders', function (Request $request, Response $response, 
         $dbInstance = $db->getDB();
         $res = createNewOrder($dbInstance, json_decode($params,true));
 
-        return $response->withStatus(HTTP_OK);
+        return $response->withStatus(Constants::HTTP_OK);
     } else {
-        $response->getBody()->write(UNAUTHORIZED_TEXT);
-        return $response->withStatus(HTTP_UNAUTHORIZED);
+        $response->getBody()->write(Constants::UNAUTHORIZED_TEXT);
+        return $response->withStatus(Constants::HTTP_UNAUTHORIZED);
     }
 
 });
@@ -173,13 +172,13 @@ $app->delete('/customers/{customer_id}/orders/{order_number}', function (Request
             deleteOrder($dbInstance, $customer_id, $order_number);
         } catch (RuntimeException $except) {
             $response->getBody()->write("Failed to cancel order. Check order number and customer id. Only the owner of an order can cancel it.");
-            return $response->withStatus(HTTP_BAD_REQUEST);
+            return $response->withStatus(Constants::HTTP_BAD_REQUEST);
         }
 
-        return $response->withStatus(HTTP_NO_CONTENT);
+        return $response->withStatus(Constants::HTTP_NO_CONTENT);
     } else {
-        $response->getBody()->write(UNAUTHORIZED_TEXT);
-        return $response->withStatus(HTTP_UNAUTHORIZED);
+        $response->getBody()->write(Constants::UNAUTHORIZED_TEXT);
+        return $response->withStatus(Constants::HTTP_UNAUTHORIZED);
     }
 });
 
@@ -207,8 +206,8 @@ $app->get('/customers/summary', function (Request $request, Response $response, 
         $response->getBody()->write(json_encode($res));
         return $response;
     } else {
-        $response->getBody()->write(UNAUTHORIZED_TEXT);
-        return $response->withStatus(HTTP_UNAUTHORIZED);
+        $response->getBody()->write(Constants::UNAUTHORIZED_TEXT);
+        return $response->withStatus(Constants::HTTP_UNAUTHORIZED);
     }
 });
 
@@ -228,8 +227,8 @@ $app->get('/transporters/shipments', function (Request $request, Response $respo
         $response->getBody()->write(json_encode($res));
         return $response;
     } else {
-        $response->getBody()->write(UNAUTHORIZED_TEXT);
-        return $response->withStatus(HTTP_UNAUTHORIZED);
+        $response->getBody()->write(Constants::UNAUTHORIZED_TEXT);
+        return $response->withStatus(Constants::HTTP_UNAUTHORIZED);
     }
 });
 
@@ -246,10 +245,10 @@ $app->put('/transporters/shipments/{shipment_number}', function (Request $reques
 
         changeShipmentState($dbInstance, $shipment_number, 1);
 
-        return $response->withStatus(HTTP_NO_CONTENT);
+        return $response->withStatus(Constants::HTTP_NO_CONTENT);
     } else {
-        $response->getBody()->write(UNAUTHORIZED_TEXT);
-        return $response->withStatus(HTTP_UNAUTHORIZED);
+        $response->getBody()->write(Constants::UNAUTHORIZED_TEXT);
+        return $response->withStatus(Constants::HTTP_UNAUTHORIZED);
     }
 });
 
@@ -264,7 +263,7 @@ $app->get('/public/skis', function (Request $request, Response $response, array 
     $res = getSkis($dbInstance);
 
     $response->getBody()->write(json_encode($res));
-    return $response;
+    return $response->withStatus(Constants::HTTP_OK);
 });
 
 $app->run();

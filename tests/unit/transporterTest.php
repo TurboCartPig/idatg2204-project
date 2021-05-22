@@ -1,6 +1,8 @@
 <?php
+
+use DBProject\Database\Database;
+
 require_once './src/endpoints/transporters.php';
-require_once './src/database/Database.php';
 
 class transporterTest extends \Codeception\Test\Unit
 {
@@ -9,9 +11,14 @@ class transporterTest extends \Codeception\Test\Unit
      */
     protected UnitTester $tester;
 
+    /**
+     * @var Database Database object.
+     */
+    protected Database $db;
 
     protected function _before()
     {
+        $this->db = new Database();
     }
 
     protected function _after()
@@ -21,10 +28,8 @@ class transporterTest extends \Codeception\Test\Unit
     // tests
     public function testGetShipments()
     {
-        $db = new Database();
+        $res = getShipments($this->db->getDB());
 
-        $res = getShipments($db->getDB());
-
-        $this->assertCount(1,$res);
+        $this->assertCount(1, $res);
     }
 }

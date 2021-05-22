@@ -1,17 +1,24 @@
 <?php
-require_once './src/endpoints/customer.php';
-require_once './src/database/Database.php';
 
-class customerRepTest extends \Codeception\Test\Unit
+use DBProject\Database\Database;
+
+require_once './src/endpoints/customer.php';
+
+class CustomerTest extends \Codeception\Test\Unit
 {
     /**
      * @var \UnitTester
      */
     protected UnitTester $tester;
 
+    /**
+     * @var Database Database object.
+     */
+    protected Database $db;
 
     protected function _before()
     {
+        $this->db = new Database();
     }
 
     protected function _after()
@@ -21,15 +28,12 @@ class customerRepTest extends \Codeception\Test\Unit
     // tests
     public function testOrderCreation()
     {
-        $db = new Database();
-
         $body['price'] = '256000';
         $body['customer_rep'] = '2';
         $body['customer_id'] = '3';
 
-        $res = createNewOrder($db->getDB(), $body);
+        $res = createNewOrder($this->db->getDB(), $body);
 
         $this->tester->seeInDatabase('orders', array('total_price' => '256000', 'customer_rep' => '2', 'customer_id' => '3'));
-
     }
 }

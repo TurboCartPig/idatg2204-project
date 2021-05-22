@@ -1,6 +1,8 @@
 <?php
+
+use DBProject\Database\Database;
+
 require_once './src/endpoints/public.php';
-require_once './src/database/Database.php';
 
 class publicTest extends \Codeception\Test\Unit
 {
@@ -9,9 +11,14 @@ class publicTest extends \Codeception\Test\Unit
      */
     protected UnitTester $tester;
 
+    /**
+     * @var Database Database object.
+     */
+    protected Database $db;
 
     protected function _before()
     {
+        $this->db = new Database();
     }
 
     protected function _after()
@@ -21,10 +28,9 @@ class publicTest extends \Codeception\Test\Unit
     // tests
     public function testGetSkis()
     {
-        $db = new Database();
 
-        $res = getSkis($db->getDB());
+        $res = getSkis($this->db->getDB());
 
-        $this->assertCount(4,$res);
+        $this->assertCount(4, $res);
     }
 }

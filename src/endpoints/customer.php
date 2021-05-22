@@ -63,6 +63,7 @@ function createNewOrder(PDO $dbInstance, mixed $params): array
     $data['body'] = "";
     $data['status'] = 204;
     return $data;
+
 }
 
 /**
