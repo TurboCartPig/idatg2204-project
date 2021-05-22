@@ -1,4 +1,8 @@
 <?php
+namespace DBProject\Database;
+
+use PDO;
+
 require_once 'dbCredentials.php';
 
 /**

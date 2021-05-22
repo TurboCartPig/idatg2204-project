@@ -33,7 +33,7 @@
     },
     "autoload":{
         "psr-4":{
-            "Del\\":"src/"
+            "DBProject\\":"src/"
         }
     },
     "scripts": {

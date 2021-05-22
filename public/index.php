@@ -4,10 +4,9 @@ use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
+use DBProject\Database\Database;
 
 require __DIR__ . '/../vendor/autoload.php';
-require_once '../src/database/Database.php';
-require_once '../src/database/dbCredentials.php';
 require_once '../src/endpoints/customer.php';
 require_once '../src/endpoints/customerRep.php';
 require_once '../src/endpoints/transporters.php';
