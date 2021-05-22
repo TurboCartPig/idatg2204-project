@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS db_project.orders
     order_state   INT REFERENCES order_state (id) ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
-CREATE TABLE IF NOT EXISTS db_project.skiis_in_order
+CREATE TABLE IF NOT EXISTS db_project.skis_in_order
 (
     order_number INT NOT NULL REFERENCES `orders` (order_number) ON UPDATE CASCADE ON DELETE NO ACTION,
     ski_id       INT NOT NULL REFERENCES ski (id) ON UPDATE CASCADE ON DELETE NO ACTION,
@@ -249,7 +249,7 @@ VALUES ('cold','skin','Unisex model released in 2021',FALSE,4900,2,3,6,8),
        ('cold','skin','Unisex model released in 2020',FALSE,3900,2,3,6,8);
 
 
-INSERT INTO `skiis_in_order` (`order_number`,`ski_id`,`quantity`)
+INSERT INTO `skis_in_order` (`order_number`,`ski_id`,`quantity`)
 VALUES (1,3,28),
        (2,2,41),
        (3,1,30),

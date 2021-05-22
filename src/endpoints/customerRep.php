@@ -17,14 +17,14 @@ function fetchOrders(PDO $dbInstance, mixed $employeeID): array
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $res[$row['order_number']] = $row;
         $sub_query =   "SELECT sio.order_number,`ski_id`, `quantity` 
-                        FROM `skiis_in_order` AS sio
+                        FROM `skis_in_order` AS sio
                         INNER JOIN `orders` AS o ON sio.order_number = o.order_number
                         WHERE sio.order_number = :order_num";
         $sub_stmt = $dbInstance->prepare($sub_query);
         $sub_stmt->bindValue(":order_num",$row['order_number']);
         $sub_stmt->execute();
         while ($sub_row = $sub_stmt->fetch(PDO::FETCH_ASSOC)) {
-            $res[$row['order_number']]['skiis_in_order'] = $sub_row;
+            $res[$row['order_number']]['skis_in_order'] = $sub_row;
         }
     }
     return $res;

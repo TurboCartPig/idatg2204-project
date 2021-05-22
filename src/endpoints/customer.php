@@ -29,18 +29,18 @@ function getOrdersForCustomer(PDO $dbInstance, mixed $customerID): array
 function createNewOrder(PDO $dbInstance, array $params): array
 {
     $res = array();
-    $query = "INSERT INTO orders (total_price, customer_rep, order_state, id)
-              VALUES (:price,:cus_rep,1,:cid)";
+    $ski = getSkiByID($dbInstance,$params['skis_in_order']['ski_id']);
+    $query = "INSERT INTO orders (total_price, customer_rep, order_state, customer_id)
+              VALUES (:price,:cus_rep,1,:cid);              
+              SELECT `order_number` FROM orders WHERE `order_number` = LAST_INSERT_ID();";
     $stmt = $dbInstance->prepare($query);
-    $stmt->bindValue(":price", $params['price']);
+    $stmt->bindValue(":price", $params['skis_in_order']['quantity'] * $ski['msrp']);
     $stmt->bindValue(":cus_rep", $params['customer_rep']);
     $stmt->bindValue(":cid", $params['customer_id']);
     $stmt->execute();
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $res[] = $row;
-    }
 
-    return $res;
+    $inserted_order = $stmt->fetch(PDO::FETCH_ASSOC); // We know there will only be 1 row
+    $ski_query = "INSERT INTO `skis_in_order`"
 }
 
 /**
@@ -65,6 +65,24 @@ function deleteOrder(PDO $dbInstance, int $customer_id, int $order_number) {
     $stmt->bindValue(":customer_id", $customer_id);
     $stmt->bindValue(":order_number", $order_number);
     $stmt->execute();
+}
+
+/**
+ * @param PDO $dbInstance
+ * @param string $ski_id
+ * @return array
+ */
+function getSkiByID(PDO $dbInstance, string $ski_id): array {
+    $res = array();
+    $query = "SELECT `id`,`temp_class`,`grip`,`description`,`msrp`, `type`,
+                     `model`, `weight`, `size` FROM ski where id = :ski_id";
+    $stmt  = $dbInstance->prepare($query);
+    $stmt->bindValue(":ski_id",$ski_id);
+    $stmt->execute();
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $res[] = $row;
+    }
+    return $res;
 }
 
 /**
