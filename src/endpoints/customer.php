@@ -29,6 +29,7 @@ function getOrdersForCustomer(PDO $dbInstance, mixed $customerID): array
 function createNewOrder(PDO $dbInstance, array $params): array
 {
     $res = array();
+    $dbInstance->beginTransaction();
     $ski = getSkiByID($dbInstance,$params['skis_in_order']['ski_id']);
     $query = "INSERT INTO orders (total_price, customer_rep, order_state, customer_id)
               VALUES (:price,:cus_rep,1,:cid);              
@@ -42,8 +43,11 @@ function createNewOrder(PDO $dbInstance, array $params): array
     $inserted_order = $stmt->fetch(PDO::FETCH_ASSOC); // We know there will only be 1 row
     $ski_query = "INSERT INTO `skis_in_order` (order_number,ski_id,quantity)
                   VALUES (:order_num,:ski_id,:quantity)";
+    foreach ($params['skis_in_order'] as &$ski) {
+        $ski_stmt = $dbInstance->prepare($query);
+    }
 
-
+    $dbInstance->commit();
 }
 
 /**
