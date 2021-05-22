@@ -22,32 +22,47 @@ function getOrdersForCustomer(PDO $dbInstance, mixed $customerID): array
 }
 
 /**
+ * In this function, we WOULD HAVE USED transactions, if it were possible. We need NESTED
+ * transactions to make this work, something of which PDO does NOT support.
  * @param PDO $dbInstance
  * @param array $params
  * @return array
  */
-function createNewOrder(PDO $dbInstance, array $params): array
+function createNewOrder(PDO $dbInstance, mixed $params): array
 {
-    $res = array();
-    $dbInstance->beginTransaction();
-    $ski = getSkiByID($dbInstance,$params['skis_in_order']['ski_id']);
+    $total_price = 0;
+    foreach ($params['skis_in_order'] as $ski) {
+        $ski_instance = getSkiByID($dbInstance,$ski['ski_id']);
+        $total_price += $ski_instance['msrp'] * $ski['quantity'];
+    }
+
     $query = "INSERT INTO orders (total_price, customer_rep, order_state, customer_id)
-              VALUES (:price,:cus_rep,1,:cid);              
-              SELECT `order_number` FROM orders WHERE `order_number` = LAST_INSERT_ID();";
+              VALUES (:price,:cus_rep,1,:cid)";
     $stmt = $dbInstance->prepare($query);
-    $stmt->bindValue(":price", $params['skis_in_order']['quantity'] * $ski['msrp']);
+    $stmt->bindValue(":price", $total_price);
     $stmt->bindValue(":cus_rep", $params['customer_rep']);
     $stmt->bindValue(":cid", $params['customer_id']);
     $stmt->execute();
+    $stmt->fetchAll();
 
-    $inserted_order = $stmt->fetch(PDO::FETCH_ASSOC); // We know there will only be 1 row
+    $last_order_query = "SELECT `order_number` FROM orders WHERE `order_number` = LAST_INSERT_ID()";
+    $last_order_stmt  = $dbInstance->prepare($last_order_query);
+    $last_order_stmt->execute();
+    $inserted_order = $last_order_stmt->fetch(PDO::FETCH_ASSOC);
+
     $ski_query = "INSERT INTO `skis_in_order` (order_number,ski_id,quantity)
                   VALUES (:order_num,:ski_id,:quantity)";
-    foreach ($params['skis_in_order'] as &$ski) {
-        $ski_stmt = $dbInstance->prepare($query);
+    foreach ($params['skis_in_order'] as $ski) {
+        $ski_stmt = $dbInstance->prepare($ski_query);
+        $ski_stmt->bindValue(":order_num",$inserted_order['order_number']);
+        $ski_stmt->bindValue(":ski_id",$ski['ski_id']);
+        $ski_stmt->bindValue(":quantity",$ski['quantity']);
+        $ski_stmt->execute();
+        $ski_stmt->fetchAll();
     }
-
-    $dbInstance->commit();
+    $data['body'] = "";
+    $data['status'] = 204;
+    return $data;
 }
 
 /**
@@ -68,7 +83,7 @@ function deleteOrder(PDO $dbInstance, int $customer_id, int $order_number) {
     }
 
     // Delete skiis in order for this order
-    $query = "DELETE FROM skiis_in_order WHERE order_number = :order_number"
+    $query = "DELETE FROM skiis_in_order WHERE order_number = :order_number";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":order_number", $order_number);
     $stmt->execute();
@@ -92,10 +107,7 @@ function getSkiByID(PDO $dbInstance, string $ski_id): array {
     $stmt  = $dbInstance->prepare($query);
     $stmt->bindValue(":ski_id",$ski_id);
     $stmt->execute();
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $res[] = $row;
-    }
-    return $res;
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 /**

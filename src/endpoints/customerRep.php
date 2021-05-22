@@ -123,7 +123,7 @@ function createShipment(PDO $dbInstance, mixed $employeeID, mixed $body)
         $stmt->execute();
     } catch (PDOException) {
         $dbInstance->rollback();
-        $data['body'] = "Execution occurred in the database";
+        $data['body'] = "Exception occurred in the database";
         $data['status'] = 500;
         return $data;
     }
