@@ -37,6 +37,6 @@ class CustomerTest extends \Codeception\Test\Unit
 
         $res = createNewOrder($this->db->getDB(), $body);
 
-        $this->tester->seeInDatabase('orders', array('total_price' => '256000', 'customer_rep' => '2', 'customer_id' => '3'));
+        $this->tester->seeInDatabase('orders', array('total_price' => '215000', 'customer_rep' => '2', 'customer_id' => '3'));
     }
 }
