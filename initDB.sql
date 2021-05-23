@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS db_project.orders
     customer_id   INT REFERENCES `customer` (id) ON UPDATE CASCADE ON DELETE SET NULL,
     customer_rep  INT REFERENCES employee (number) ON UPDATE CASCADE ON DELETE SET NULL,
     total_price   INT NOT NULL,
-    order_state   INT REFERENCES order_state (id) ON UPDATE CASCADE ON DELETE NO ACTION
+    order_state   INT NOT NULL REFERENCES order_state (id) ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
 CREATE TABLE IF NOT EXISTS db_project.skis_in_order
@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS db_project.skis_in_order
     order_number INT NOT NULL REFERENCES `orders` (order_number) ON UPDATE CASCADE ON DELETE NO ACTION,
     ski_id       INT NOT NULL REFERENCES ski (id) ON UPDATE CASCADE ON DELETE NO ACTION,
     quantity     INT NOT NULL,
+    order_state  INT NOT NULL REFERENCES order_state (id) ON UPDATE CASCADE ON DELETE NO ACTION,
     PRIMARY KEY (order_number, ski_id)
 );
 
@@ -188,7 +189,7 @@ INSERT INTO `employee_role` (`id`, `role`)
 VALUES (1, 'manager');
 
 INSERT INTO `orders` (`order_number`, `customer_id`, `customer_rep`, `total_price`, `order_state`)
-VALUES (1, 1, 1, 120400, 2),
+VALUES (1, 1, 1, 206200, 2),
        (2, 1, 1, 267730, 3),
        (3, 2, 1, 147000, 1),
        (4, 2, 1, 136500, 2),
@@ -253,6 +254,7 @@ VALUES ('cold','skin','Unisex model released in 2021',FALSE,4900,2,3,6,8),
 
 INSERT INTO `skis_in_order` (`order_number`,`ski_id`,`quantity`)
 VALUES (1,3,28),
+       (1,4,22),
        (2,2,41),
        (3,1,30),
        (4,4,35),
