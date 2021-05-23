@@ -71,7 +71,7 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}/open', function (Re
 /**
  * Changing the state of an order from open to filled.
  */
-$app->put('/customer_rep/{employee_id}/orders/{order_number}/filled', function (Request $request, Response $response, array $args) {
+$app->put('/storekeeper/{employee_id}/orders/{order_number}/filled', function (Request $request, Response $response, array $args) {
     $employeeID = $args['employee_id'];
     $orderNumber = $args['order_number'];
     $token      = $request->getHeaderLine('token');
