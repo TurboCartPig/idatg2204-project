@@ -102,7 +102,6 @@ $app->post('/customer_rep/{employee_id}/shipments', function (Request $request, 
     if ($db->isAuthorized($token)) {
         $dbInstance = $db->getDB();
 
-        //$res = createShipment($dbInstance, $employeeID, (array)json_decode($body));
         $res = createShipment($dbInstance, $employeeID, json_decode($body,true));
 
         $response->getBody()->write($res['body']);

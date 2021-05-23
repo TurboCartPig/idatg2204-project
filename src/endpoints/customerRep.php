@@ -16,7 +16,7 @@ function fetchOrders(PDO $dbInstance, mixed $employeeID): array
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $res[$row['order_number']] = $row;
-        $sub_query =   "SELECT sio.order_number,`ski_id`, `quantity` 
+        $sub_query =   "SELECT sio.order_number,`ski_id`, `quantity`, sio.`order_state` 
                         FROM `skis_in_order` AS sio
                         INNER JOIN `orders` AS o ON sio.order_number = o.order_number
                         WHERE sio.order_number = :order_num";
