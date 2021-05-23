@@ -83,7 +83,8 @@ function createNewOrder(PDO $dbInstance, mixed $params): array
  * @param int $order_number
  */
 function deleteOrder(PDO $dbInstance, int $customer_id, int $order_number) {
-    $query = "SELECT COUNT(*) FROM orders WHERE order_number = :order_number AND id = :customer_id";
+    $dbInstance->beginTransaction();
+    $query = "SELECT COUNT(*) FROM orders WHERE order_number = :order_number AND customer_id = :customer_id";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":customer_id", $customer_id);
     $stmt->bindValue(":order_number", $order_number);
@@ -97,13 +98,34 @@ function deleteOrder(PDO $dbInstance, int $customer_id, int $order_number) {
     $query = "DELETE FROM skis_in_order WHERE order_number = :order_number";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":order_number", $order_number);
-    $stmt->execute();
+
+    // Try to execute query, but if it fails, rollback the entire transaction
+    try {
+        $stmt->execute();
+    } catch (PDOException) {
+        $dbInstance->rollback();
+        $data['body'] = "Exception occurred in the database";
+        $data['status'] = 500;
+        return $data;
+    }
 
     // Delete actual order
     $query = "DELETE FROM orders WHERE order_number = :order_number";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":order_number", $order_number);
-    $stmt->execute();
+
+    // Try to execute query, but if it fails, rollback the entire transaction
+    try {
+        $stmt->execute();
+    } catch (PDOException) {
+        $dbInstance->rollback();
+        $data['body'] = "Exception occurred in the database";
+        $data['status'] = 500;
+        return $data;
+    }
+
+
+    $dbInstance->commit();
 }
 
 /**
