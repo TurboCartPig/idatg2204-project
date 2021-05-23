@@ -74,6 +74,14 @@ function updateOrderState(PDO $dbInstance, mixed $employeeID, mixed $orderNumber
     $stmt->bindValue(":state", $state);
     $stmt->execute();
 
+    $sio_query = "UPDATE skis_in_order
+                  SET order_state = :state
+                  WHERE order_number = :onb";
+    $sio_stmt = $dbInstance->prepare($sio_query);
+    $sio_stmt->bindValue(":onb",$orderNumber);
+    $sio_stmt->bindValue(":state",$state);
+    $sio_stmt->execute();
+
     $dbInstance->commit();
 
     $data['body'] = "";

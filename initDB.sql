@@ -252,16 +252,16 @@ VALUES ('cold','skin','Unisex model released in 2021',FALSE,4900,2,3,6,8),
        ('cold','skin','Unisex model released in 2020',FALSE,3900,2,3,6,8);
 
 
-INSERT INTO `skis_in_order` (`order_number`,`ski_id`,`quantity`)
-VALUES (1,3,28),
-       (1,4,22),
-       (2,2,41),
-       (3,1,30),
-       (4,4,35),
-       (5,2,20),
-       (6,1,55),
-       (7,4,90),
-       (8,2,50);
+INSERT INTO `skis_in_order` (`order_number`,`ski_id`,`quantity`,`order_state`)
+VALUES (1,3,28,2),
+       (1,4,22,2),
+       (2,2,41,3),
+       (3,1,30,1),
+       (4,4,35,2),
+       (5,2,20,3),
+       (6,1,55,2),
+       (7,4,90,1),
+       (8,2,50,2);
 
 
 -- Create a view of the orders table, from the perspective of the employees.
