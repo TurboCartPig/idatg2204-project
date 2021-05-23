@@ -126,6 +126,7 @@ function createShipment(PDO $dbInstance, mixed $employeeID, mixed $body)
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":onb", $body['order_number']);
 
+
     // Try to execute query, but if it fails, rollback the entire transaction
     try {
         $stmt->execute();
@@ -136,6 +137,23 @@ function createShipment(PDO $dbInstance, mixed $employeeID, mixed $body)
         return $data;
     }
 
+    $sio_query = "UPDATE skis_in_order
+                  SET order_state = 4
+                  WHERE order_number = :onb";
+    $sio_stmt = $dbInstance->prepare($sio_query);
+    $sio_stmt->bindValue(":onb", $body['order_number']);
+    $sio_stmt->execute();
+
+
+    // Try to execute sio_query, but if it fails, rollback the entire transaction
+    try {
+        $stmt->execute();
+    } catch (PDOException) {
+        $dbInstance->rollback();
+        $data['body'] = "Exception occurred in the database";
+        $data['status'] = 500;
+        return $data;
+    }
 
     // FIXME: Do not create a shipment for orders that already have shipments associated with them.
     // TODO: Do not get ids from the user.
