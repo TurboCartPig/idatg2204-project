@@ -173,7 +173,7 @@ CREATE TABLE IF NOT EXISTS db_project.production_plan
 );
 
 INSERT INTO `auth_token` (`token`)
-VALUE ('customer_rep');
+VALUE ('SUPER_SECRET_HASHED_CODE');
 
 INSERT INTO `customer` (`id`, `start_date`, `end_date`, `customer_rep`)
 VALUES (1, '2020-01-01', '2021-01-01', 2),
