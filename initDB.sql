@@ -279,10 +279,3 @@ INNER JOIN address ON address.id = address_id
 INNER JOIN transporter ON transporter.id = transporter_id
 WHERE shipment_state.state = 'Ready';
 
-
--- Create a view of complete orders (Containing both skis_in_order and orders)
-CREATE VIEW complete_orders AS
-SELECT sio.order_number, sio.ski_id, sio.quantity, o.total_price, o.parent_number, o.customer_id, o.customer_rep, o.order_state
-FROM skis_in_order AS sio
-LEFT OUTER JOIN orders AS o ON sio.order_number = o.order_number
-

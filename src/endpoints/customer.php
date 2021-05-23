@@ -8,14 +8,24 @@
 function getOrdersForCustomer(PDO $dbInstance, mixed $customerID): array
 {
     $res = array();
-    $query = "SELECT * FROM orders 
-                INNER JOIN customer ON customer.id = orders.customer_id
-                WHERE :cid = orders.customer_id";
+    $query = "SELECT order_number, parent_number, customer_id, customer_rep, total_price, order_state 
+              FROM orders 
+              WHERE :cid = orders.customer_id";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":cid", $customerID);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $res[] = $row;
+        $res[$row['order_number']] = $row;
+        $sub_query =   "SELECT sio.order_number,`ski_id`, `quantity` 
+                        FROM `skis_in_order` AS sio
+                        INNER JOIN `orders` AS o ON sio.order_number = o.order_number
+                        WHERE sio.order_number = :order_num";
+        $sub_stmt = $dbInstance->prepare($sub_query);
+        $sub_stmt->bindValue(":order_num",$row['order_number']);
+        $sub_stmt->execute();
+        while ($sub_row = $sub_stmt->fetch(PDO::FETCH_ASSOC)) {
+            $res[$row['order_number']]['skis_in_order'][] = $sub_row;
+        }
     }
 
     return $res;

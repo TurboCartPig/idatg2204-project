@@ -91,7 +91,7 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}/filled', function (
 });
 
 /**
- * Create a shipment request when an order has been filled.
+ * Create a shipment request if an order has been filled.
  */
 $app->post('/customer_rep/{employee_id}/shipments', function (Request $request, Response $response, array $args) {
     $employeeID = $args['employee_id'];
