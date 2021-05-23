@@ -83,8 +83,8 @@ function deleteOrder(PDO $dbInstance, int $customer_id, int $order_number) {
         throw new RuntimeException("Order does not exist or is not associated with this customer id");
     }
 
-    // Delete skiis in order for this order
-    $query = "DELETE FROM skiis_in_order WHERE order_number = :order_number";
+    // Delete skis in order for this order
+    $query = "DELETE FROM skis_in_order WHERE order_number = :order_number";
     $stmt = $dbInstance->prepare($query);
     $stmt->bindValue(":order_number", $order_number);
     $stmt->execute();

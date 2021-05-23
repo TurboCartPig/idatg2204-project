@@ -187,21 +187,22 @@ VALUES (1, 'Gunnar', 1);
 INSERT INTO `employee_role` (`id`, `role`)
 VALUES (1, 'manager');
 
-INSERT INTO `orders` (`order_number`, `parent_number`, `customer_id`, `customer_rep`, `total_price`, `order_state`)
-VALUES (1, 2, 1, 1, 120400, 2),
-       (2, 2, 1, 1, 267730, 3),
-       (3, 3, 2, 1, 147000, 1),
-       (4, 3, 2, 1, 136500, 2),
-       (5, 5, 3, 1, 130600, 3),
-       (6, 5, 3, 1, 269500, 2),
-       (7, 7, 4, 1, 351000, 1),
-       (8, 7, 4, 1, 326500, 2);
+INSERT INTO `orders` (`order_number`, `customer_id`, `customer_rep`, `total_price`, `order_state`)
+VALUES (1, 1, 1, 120400, 2),
+       (2, 1, 1, 267730, 3),
+       (3, 2, 1, 147000, 1),
+       (4, 2, 1, 136500, 2),
+       (5, 3, 1, 130600, 3),
+       (6, 3, 1, 269500, 2),
+       (7, 4, 1, 351000, 1),
+       (8, 4, 1, 326500, 2);
 
 INSERT INTO `order_state` (`id`, `state`)
 VALUES (1, 'New'),
        (2, 'Open'),
        (3, 'Filled'),
-       (4, 'Shipped');
+       (4, 'Shipped'),
+       (5, 'Split');
 
 
 INSERT INTO `production_plan` (`num_of_skies`, `ski_type`, `manager`)
