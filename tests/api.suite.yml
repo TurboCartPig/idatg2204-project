@@ -8,5 +8,4 @@ modules:
     config:
       - PhpBrowser:
           headers:
-            token: SUPER_SECRET_HASHED_CODE
-            Content-Type: application/json
+            Content-Type: 'application/json'
