@@ -1,11 +1,7 @@
 actor: ApiTester
 modules:
-    enabled:
-        - \Helper\Api
-        - REST:
-              url: 'http://localhost:40008'
-              depends: PhpBrowser
-    config:
-      - PhpBrowser:
-          headers:
-            Content-Type: 'application/json'
+  enabled:
+    - \Helper\Api
+    - REST:
+        url: 'http://localhost:40008'
+        depends: PhpBrowser
