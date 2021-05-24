@@ -1,0 +1,12 @@
+actor: ApiTester
+modules:
+    enabled:
+        - \Helper\Api
+        - REST:
+              url: 'http://localhost:40008'
+              depends: PhpBrowser
+    config:
+      - PhpBrowser:
+          headers:
+            token: SUPER_SECRET_HASHED_CODE
+            Content-Type: application/json
