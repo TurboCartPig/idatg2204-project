@@ -26,6 +26,28 @@ class CustomerTest extends \Codeception\Test\Unit
     }
 
     // tests
+    public function testFetchOrdersMadeByCustomer() {
+        $customerID = 3;
+
+        $res = getOrdersForCustomer($this->db->getDB(), $customerID);
+
+        $this->assertCount(2,$res);
+
+        // Order with ID 5
+        $first_order = $res['5'];
+
+        $this->assertEquals('130600',$first_order['total_price']);
+        $this->assertEquals('5',$first_order['customer_rep']);
+
+
+        // Order with ID 6
+        $second_order = $res['6'];
+
+        $this->assertEquals('269500',$second_order['total_price']);
+        $this->assertEquals('3',$second_order['customer_rep']);
+    }
+
+
     public function testOrderCreationSingleSki()
     {
         $ski['ski_id'] = "3";
