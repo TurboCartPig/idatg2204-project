@@ -59,7 +59,7 @@ class CustomerTest extends \Codeception\Test\Unit
 
         $this->tester->dontSeeInDatabase('orders', array('total_price' => '215000', 'customer_rep' => '2', 'customer_id' => '3'));
 
-        $res = createNewOrder($this->db->getDB(), $body);
+        createNewOrder($this->db->getDB(), $body);
 
         $this->tester->seeInDatabase('orders', array('total_price' => '215000', 'customer_rep' => '2', 'customer_id' => '3'));
     }
@@ -80,8 +80,29 @@ class CustomerTest extends \Codeception\Test\Unit
 
         $this->tester->dontSeeInDatabase('orders', array('total_price' => '606800', 'customer_rep' => '2', 'customer_id' => '3'));
 
-        $res = createNewOrder($this->db->getDB(), $body);
+        createNewOrder($this->db->getDB(), $body);
 
         $this->tester->seeInDatabase('orders', array('total_price' => '606800', 'customer_rep' => '2', 'customer_id' => '3'));
+    }
+
+    public function testOrderDeletion() {
+        $customer_id = 3;
+        $order_number = 5;
+
+        $this->tester->seeInDatabase('orders',array('order_number' => '5','customer_id' => '3'));
+
+        deleteOrder($this->db->getDB(), $customer_id, $order_number);
+
+        $this->tester->dontSeeInDatabase('orders',array('order_number' => '5','customer_id' => '3'));
+
+
+        $customer_id = 2;
+        $order_number = 3;
+
+        $this->tester->seeInDatabase('orders',array('order_number' => '3','customer_id' => '2'));
+
+        deleteOrder($this->db->getDB(), $customer_id, $order_number);
+
+        $this->tester->dontSeeInDatabase('orders',array('order_number' => '3','customer_id' => '2'));
     }
 }
