@@ -32,19 +32,47 @@ class CustomerRepTest extends \Codeception\Test\Unit
         $employeeID = 2;
         $res = fetchOrders($this->db->getDB(),$employeeID);
 
+        // Check that the count is what we expect
         $this->assertCount(2,$res);
 
-        $first_order = $res[0];
+        // Verifying that the actual orders contains the expected data
+        // The order ID is 3
+        $first_order = $res['3'];
 
         $this->assertEquals('147000',$first_order['total_price']);
         $this->assertEquals('2',$first_order['customer_id']);
 
-        $second_order
+        // The order ID is 8
+        $second_order = $res['8'];
+
+        $this->assertEquals('326500',$second_order['total_price']);
+        $this->assertEquals('4',$second_order['customer_id']);
 
         $employeeID = 3;
         $res = fetchOrders($this->db->getDB(),$employeeID);
 
+        // Check that the count is what we expect
         $this->assertCount(3,$res);
+
+        // Verifying that the actual orders contains the expected data
+        // The order ID is 2
+        $first_order = $res['2'];
+
+        $this->assertEquals('267730',$first_order['total_price']);
+        $this->assertEquals('1',$first_order['customer_id']);
+
+        // The order ID is 4
+        $second_order = $res['4'];
+
+        $this->assertEquals('136500',$second_order['total_price']);
+        $this->assertEquals('2',$second_order['customer_id']);
+
+
+        // The order ID is 6
+        $third_order = $res['6'];
+
+        $this->assertEquals('269500',$third_order['total_price']);
+        $this->assertEquals('3',$third_order['customer_id']);
     }
 
     public function testShipmentCreation()
