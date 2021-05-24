@@ -9,7 +9,7 @@ class PublicEndpointCest
     public function test(ApiTester $I)
     {
         $I->sendGet('/public/skis');
-        $I->seeResponseCodeIs('200');
+        $I->seeResponseCodeIsSuccessful();
         $I->seeResponseIsJson();
 
         // Test that it contains an example ski
