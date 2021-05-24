@@ -75,6 +75,19 @@ class CustomerRepTest extends \Codeception\Test\Unit
         $this->assertEquals('3',$third_order['customer_id']);
     }
 
+    public function testUpdateOrderState() {
+        $employeeID = 2;
+        $orderNumber = 3;
+
+        $this->tester->seeInDatabase('orders',array('order_number' => '3','order_state' => '1'));
+        $this->tester->dontSeeInDatabase('orders',array('order_number' => '3','order_state' => '2'));
+
+        updateOrderState($this->db->getDB(), $employeeID, $orderNumber, 2);
+
+        $this->tester->seeInDatabase('orders',array('order_number' => '3','order_state' => '2'));
+        $this->tester->dontSeeInDatabase('orders',array('order_number' => '3','order_state' => '1'));
+    }
+
     public function testShipmentCreation()
     {
         $body['address_id'] = '1';
@@ -92,6 +105,5 @@ class CustomerRepTest extends \Codeception\Test\Unit
 
         $this->tester->seeInDatabase('shipment',array('address_id' => '1', 'pickup_date' => '2021-03-01',
                                                       'order_number' => '2','transporter_id' => '2', 'driver_id' => '2'));
-//        $this->tester->seeInDatabase('shipment', array('address_id' => '1', 'driver_id' => '2'));
     }
 }
