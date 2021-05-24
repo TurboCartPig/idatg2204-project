@@ -31,6 +31,15 @@ class transporterTest extends \Codeception\Test\Unit
         $res = getShipments($this->db->getDB());
 
         $this->assertCount(1, $res);
+
+        $shipment = $res[0];
+
+        $this->assertEquals("1",$shipment['shipment_number']);
+        $this->assertEquals("2",$shipment['order_number']);
+        $this->assertEquals("Sverre Iversens Vei ",$shipment['street']);
+        $this->assertEquals("31",$shipment['number']);
+        $this->assertEquals("972",$shipment['postal_code']);
+        $this->assertEquals("Oslo",$shipment['city']);
     }
 
     public function testUpdateShipmentState() {
