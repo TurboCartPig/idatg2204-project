@@ -97,20 +97,24 @@ class CustomerTest extends \Codeception\Test\Unit
         $order_number = 5;
 
         $this->tester->seeInDatabase('orders',array('order_number' => '5','customer_id' => '3'));
+        $this->tester->seeInDatabase('skis_in_order', array('ski_id' => '2', 'quantity' => '20'));
 
         deleteOrder($this->db->getDB(), $customer_id, $order_number);
 
         $this->tester->dontSeeInDatabase('orders',array('order_number' => '5','customer_id' => '3'));
+        $this->tester->dontSeeInDatabase('skis_in_order', array('ski_id' => '2', 'quantity' => '20'));
 
 
         $customer_id = 2;
         $order_number = 3;
 
         $this->tester->seeInDatabase('orders',array('order_number' => '3','customer_id' => '2'));
+        $this->tester->seeInDatabase('skis_in_order', array('ski_id' => '1', 'quantity' => '30'));
 
         deleteOrder($this->db->getDB(), $customer_id, $order_number);
 
         $this->tester->dontSeeInDatabase('orders',array('order_number' => '3','customer_id' => '2'));
+        $this->tester->dontSeeInDatabase('skis_in_order', array('ski_id' => '1', 'quantity' => '30'));
     }
 
     public function testGetProductionPlan() {
