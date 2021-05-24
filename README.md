@@ -60,6 +60,9 @@ composer start
 
 You can also run tests with the following command:
 ```bash
+# Run this in one terminal
+composer start
+# And this in another
 composer test
 ```
 # Endpoints
