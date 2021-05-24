@@ -58,10 +58,13 @@ class CustomerTest extends \Codeception\Test\Unit
         $body['skis_in_order'][] = $ski;
 
         $this->tester->dontSeeInDatabase('orders', array('total_price' => '215000', 'customer_rep' => '2', 'customer_id' => '3'));
+        $this->tester->dontSeeInDatabase('skis_in_order', array('ski_id' => '3', 'quantity' => '50'));
 
         createNewOrder($this->db->getDB(), $body);
 
         $this->tester->seeInDatabase('orders', array('total_price' => '215000', 'customer_rep' => '2', 'customer_id' => '3'));
+        $this->tester->seeInDatabase('skis_in_order', array('ski_id' => '3', 'quantity' => '50'));
+
     }
 
 
@@ -79,10 +82,14 @@ class CustomerTest extends \Codeception\Test\Unit
         $body['skis_in_order'][] = $ski_two;
 
         $this->tester->dontSeeInDatabase('orders', array('total_price' => '606800', 'customer_rep' => '2', 'customer_id' => '3'));
+        $this->tester->dontSeeInDatabase('skis_in_order', array('ski_id' => '3', 'quantity' => '50'));
+        $this->tester->dontSeeInDatabase('skis_in_order', array('ski_id' => '2', 'quantity' => '60'));
 
         createNewOrder($this->db->getDB(), $body);
 
         $this->tester->seeInDatabase('orders', array('total_price' => '606800', 'customer_rep' => '2', 'customer_id' => '3'));
+        $this->tester->seeInDatabase('skis_in_order', array('ski_id' => '3', 'quantity' => '50'));
+        $this->tester->seeInDatabase('skis_in_order', array('ski_id' => '2', 'quantity' => '60'));
     }
 
     public function testOrderDeletion() {
@@ -104,5 +111,9 @@ class CustomerTest extends \Codeception\Test\Unit
         deleteOrder($this->db->getDB(), $customer_id, $order_number);
 
         $this->tester->dontSeeInDatabase('orders',array('order_number' => '3','customer_id' => '2'));
+    }
+
+    public function testGetProductionPlan() {
+
     }
 }
