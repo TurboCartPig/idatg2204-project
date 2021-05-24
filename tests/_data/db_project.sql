@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 22. Mai, 2021 19:33 PM
+-- Generation Time: 24. Mai, 2021 10:18 AM
 -- Tjener-versjon: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -58,24 +58,7 @@ CREATE TABLE `auth_token` (
 --
 
 INSERT INTO `auth_token` (`token`) VALUES
-('customer_rep');
-
--- --------------------------------------------------------
-
---
--- Erstatningsstruktur for visning `complete_orders`
--- (See below for the actual view)
---
-CREATE TABLE IF NOT EXISTS `complete_orders` (
-`order_number` int(11)
-,`ski_id` int(11)
-,`quantity` int(11)
-,`total_price` int(11)
-,`parent_number` int(11)
-,`customer_id` int(11)
-,`customer_rep` int(11)
-,`order_state` int(11)
-);
+('SUPER_SECRET_HASHED_CODE');
 
 -- --------------------------------------------------------
 
@@ -131,7 +114,11 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`number`, `name`, `role`) VALUES
-(1, 'Gunnar', 1);
+(1, 'Gunnar', 1),
+(2, 'Johannes', 2),
+(3, 'Ola', 2),
+(4, 'Siri', 2),
+(5, 'Kari', 2);
 
 -- --------------------------------------------------------
 
@@ -164,7 +151,8 @@ CREATE TABLE `employee_role` (
 --
 
 INSERT INTO `employee_role` (`id`, `role`) VALUES
-(1, 'manager');
+(1, 'manager'),
+(2, 'customer_rep');
 
 -- --------------------------------------------------------
 
@@ -211,7 +199,7 @@ CREATE TABLE `orders` (
   `customer_id` int(11) DEFAULT NULL,
   `customer_rep` int(11) DEFAULT NULL,
   `total_price` int(11) NOT NULL,
-  `order_state` int(11) DEFAULT NULL
+  `order_state` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -219,14 +207,14 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`order_number`, `parent_number`, `customer_id`, `customer_rep`, `total_price`, `order_state`) VALUES
-(1, 2, 1, 1, 120400, 2),
-(2, 2, 1, 1, 267730, 3),
-(3, 3, 2, 1, 147000, 1),
-(4, 3, 2, 1, 136500, 2),
-(5, 5, 3, 1, 130600, 3),
-(6, 5, 3, 1, 269500, 2),
-(7, 7, 4, 1, 351000, 1),
-(8, 7, 4, 1, 326500, 2);
+(1, NULL, 1, 4, 206200, 2),
+(2, NULL, 1, 3, 267730, 3),
+(3, NULL, 2, 2, 147000, 1),
+(4, NULL, 2, 3, 136500, 2),
+(5, NULL, 3, 5, 130600, 3),
+(6, NULL, 3, 3, 269500, 2),
+(7, NULL, 4, 5, 351000, 1),
+(8, NULL, 4, 2, 326500, 2);
 
 -- --------------------------------------------------------
 
@@ -247,7 +235,8 @@ INSERT INTO `order_state` (`id`, `state`) VALUES
 (1, 'New'),
 (2, 'Open'),
 (3, 'Filled'),
-(4, 'Shipped');
+(4, 'Shipped'),
+(5, 'Split');
 
 -- --------------------------------------------------------
 
@@ -400,22 +389,24 @@ INSERT INTO `ski` (`id`, `temp_class`, `grip`, `description`, `historical`, `pho
 CREATE TABLE `skis_in_order` (
   `order_number` int(11) NOT NULL,
   `ski_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL
+  `quantity` int(11) NOT NULL,
+  `order_state` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dataark for tabell `skis_in_order`
 --
 
-INSERT INTO `skis_in_order` (`order_number`, `ski_id`, `quantity`) VALUES
-(1, 3, 28),
-(2, 2, 41),
-(3, 1, 30),
-(4, 4, 35),
-(5, 2, 20),
-(6, 1, 55),
-(7, 4, 90),
-(8, 2, 50);
+INSERT INTO `skis_in_order` (`order_number`, `ski_id`, `quantity`, `order_state`) VALUES
+(1, 3, 28, 2),
+(1, 4, 22, 2),
+(2, 2, 41, 3),
+(3, 1, 30, 1),
+(4, 4, 35, 2),
+(5, 2, 20, 3),
+(6, 1, 55, 2),
+(7, 4, 90, 1),
+(8, 2, 50, 2);
 
 -- --------------------------------------------------------
 
@@ -533,15 +524,6 @@ INSERT INTO `weight_class` (`id`, `min_weight`, `max_weight`) VALUES
 (7, 70, 90),
 (8, 90, 110),
 (9, 110, 130);
-
--- --------------------------------------------------------
-
---
--- Visningsstruktur `complete_orders`
---
-DROP TABLE IF EXISTS `complete_orders`;
-
-CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `complete_orders`  AS SELECT `sio`.`order_number` AS `order_number`, `sio`.`ski_id` AS `ski_id`, `sio`.`quantity` AS `quantity`, `o`.`total_price` AS `total_price`, `o`.`parent_number` AS `parent_number`, `o`.`customer_id` AS `customer_id`, `o`.`customer_rep` AS `customer_rep`, `o`.`order_state` AS `order_state` FROM (`skis_in_order` `sio` left join `orders` `o` on(`sio`.`order_number` = `o`.`order_number`)) ;
 
 -- --------------------------------------------------------
 
@@ -717,13 +699,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `employee_role`
 --
 ALTER TABLE `employee_role`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `grip_system`
@@ -741,7 +723,7 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `order_state`
 --
 ALTER TABLE `order_state`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `shipment`

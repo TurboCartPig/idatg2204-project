@@ -183,20 +183,25 @@ VALUES (1, '2020-01-01', '2021-01-01', 2),
 
 
 INSERT INTO `employee` (`number`, `name`, `role`)
-VALUES (1, 'Gunnar', 1);
+VALUES (1, 'Gunnar', 1),
+       (2, 'Johannes',2),
+       (3, 'Ola',2),
+       (4, 'Siri',2),
+       (5, 'Kari',2);
 
 INSERT INTO `employee_role` (`id`, `role`)
-VALUES (1, 'manager');
+VALUES (1, 'manager'),
+       (2, 'customer_rep');
 
 INSERT INTO `orders` (`order_number`, `customer_id`, `customer_rep`, `total_price`, `order_state`)
-VALUES (1, 1, 1, 206200, 2),
-       (2, 1, 1, 267730, 3),
-       (3, 2, 1, 147000, 1),
-       (4, 2, 1, 136500, 2),
-       (5, 3, 1, 130600, 3),
-       (6, 3, 1, 269500, 2),
-       (7, 4, 1, 351000, 1),
-       (8, 4, 1, 326500, 2);
+VALUES (1, 1, 4, 206200, 2),
+       (2, 1, 3, 267730, 3),
+       (3, 2, 2, 147000, 1),
+       (4, 2, 3, 136500, 2),
+       (5, 3, 5, 130600, 3),
+       (6, 3, 3, 269500, 2),
+       (7, 4, 5, 351000, 1),
+       (8, 4, 2, 326500, 2);
 
 INSERT INTO `order_state` (`id`, `state`)
 VALUES (1, 'New'),
