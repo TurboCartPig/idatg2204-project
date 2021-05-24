@@ -3,5 +3,5 @@ modules:
   enabled:
     - \Helper\Api
     - REST:
-        url: 'http://localhost:40008'
+        url: 'http://localhost:8080'
         depends: PhpBrowser

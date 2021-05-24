@@ -68,6 +68,31 @@ $app->put('/customer_rep/{employee_id}/orders/{order_number}/open', function (Re
     }
 });
 
+
+/**
+ * Fetching all orders which a specific storekeeper is responsible for and that is 'open' and ready to be filled.
+ */
+$app->get('/storekeeper/{employee_id}/orders', function (Request $request, Response $response, array $args) {
+    $employeeID = $args['employee_id'];
+    $token      = $request->getHeaderLine('token');
+
+    $db = $this->get('PDO');
+
+    if ($db->isAuthorized($token)) {
+
+        $dbInstance = $db->getDB();
+
+        $res = fetchOrdersToBeFilled($dbInstance, $employeeID);
+
+        $response->getBody()->write(json_encode($res));
+        return $response;
+    } else {
+        $response->getBody()->write(Constants::UNAUTHORIZED_TEXT);
+        return $response->withStatus(Constants::HTTP_UNAUTHORIZED);
+    }
+});
+
+
 /**
  * Changing the state of an order from open to filled.
  */

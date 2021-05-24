@@ -93,6 +93,36 @@ function updateOrderState(PDO $dbInstance, mixed $employeeID, mixed $orderNumber
 /**
  * @param PDO $dbInstance
  * @param mixed $employeeID
+ * @return array
+ */
+function fetchOrdersToBeFilled(PDO $dbInstance, mixed $employeeID): array
+{
+    $res = array();
+    // We use SELECT * because we have created a custom view for this endpoint
+    $query = "SELECT * FROM employee_orders
+                WHERE employee_number = :eid AND order_state = 2";
+    $stmt = $dbInstance->prepare($query);
+    $stmt->bindValue(":eid", $employeeID);
+    $stmt->execute();
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $res[$row['order_number']] = $row;
+        $sub_query =   "SELECT sio.order_number,`ski_id`, `quantity`, sio.`order_state` 
+                        FROM `skis_in_order` AS sio
+                        INNER JOIN `orders` AS o ON sio.order_number = o.order_number
+                        WHERE sio.order_number = :order_num";
+        $sub_stmt = $dbInstance->prepare($sub_query);
+        $sub_stmt->bindValue(":order_num",$row['order_number']);
+        $sub_stmt->execute();
+        while ($sub_row = $sub_stmt->fetch(PDO::FETCH_ASSOC)) {
+            $res[$row['order_number']]['skis_in_order'][] = $sub_row;
+        }
+    }
+    return $res;
+}
+
+/**
+ * @param PDO $dbInstance
+ * @param mixed $employeeID
  * @param mixed $body
  * @return array
  */
