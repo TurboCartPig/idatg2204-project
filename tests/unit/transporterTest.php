@@ -32,4 +32,19 @@ class transporterTest extends \Codeception\Test\Unit
 
         $this->assertCount(1, $res);
     }
+
+    public function testUpdateShipmentState() {
+
+        $shipment_number = 1;
+        $shipment_state  = 1;
+
+        $this->tester->seeInDatabase('shipment',array('shipment_number' => '1','shipment_state' => '2'));
+        $this->tester->dontSeeInDatabase('shipment',array('shipment_number' => '1','shipment_state' => '1'));
+
+        changeShipmentState($this->db->getDB(), $shipment_number, $shipment_state);
+
+        $this->tester->seeInDatabase('shipment',array('shipment_number' => '1','shipment_state' => '1'));
+        $this->tester->dontSeeInDatabase('shipment',array('shipment_number' => '1','shipment_state' => '2'));
+    }
+
 }
