@@ -118,6 +118,21 @@ class CustomerTest extends \Codeception\Test\Unit
     }
 
     public function testGetProductionPlan() {
+        $res = getProductionPlan($this->db->getDB());
 
+        $this->tester->assertCount(2,$res);
+
+        $first_product = $res[0];
+
+        $this->tester->assertEquals('200',$first_product['num_of_skies']);
+        $this->tester->assertEquals('2',$first_product['ski_type']);
+        $this->tester->assertEquals('1',$first_product['manager']);
+
+
+        $second_product = $res[1];
+
+        $this->tester->assertEquals('500',$second_product['num_of_skies']);
+        $this->tester->assertEquals('1',$second_product['ski_type']);
+        $this->tester->assertEquals('1',$second_product['manager']);
     }
 }
