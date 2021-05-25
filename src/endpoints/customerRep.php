@@ -160,7 +160,7 @@ function createShipment(PDO $dbInstance, mixed $employeeID, mixed $body)
     // Try to execute query, but if it fails, rollback the entire transaction
     try {
         $stmt->execute();
-    } catch (PDOException) {
+    } catch (PDOException $except) {
         $dbInstance->rollback();
         $data['body'] = "Exception occurred in the database";
         $data['status'] = 500;
@@ -178,7 +178,7 @@ function createShipment(PDO $dbInstance, mixed $employeeID, mixed $body)
     // Try to execute sio_query, but if it fails, rollback the entire transaction
     try {
         $stmt->execute();
-    } catch (PDOException) {
+    } catch (PDOException $except) {
         $dbInstance->rollback();
         $data['body'] = "Exception occurred in the database";
         $data['status'] = 500;
@@ -198,7 +198,7 @@ function createShipment(PDO $dbInstance, mixed $employeeID, mixed $body)
 
     try {
         $stmt->execute();
-    } catch (PDOException) {
+    } catch (PDOException $except) {
         $dbInstance->rollback();
         $data['body'] = "Exception occurred in the database";
         $data['status'] = 500;

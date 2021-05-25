@@ -102,7 +102,7 @@ function deleteOrder(PDO $dbInstance, int $customer_id, int $order_number) {
     // Try to execute query, but if it fails, rollback the entire transaction
     try {
         $stmt->execute();
-    } catch (PDOException) {
+    } catch (PDOException $except) {
         $dbInstance->rollback();
         $data['body'] = "Exception occurred in the database";
         $data['status'] = 500;
@@ -117,7 +117,7 @@ function deleteOrder(PDO $dbInstance, int $customer_id, int $order_number) {
     // Try to execute query, but if it fails, rollback the entire transaction
     try {
         $stmt->execute();
-    } catch (PDOException) {
+    } catch (PDOException $except) {
         $dbInstance->rollback();
         $data['body'] = "Exception occurred in the database";
         $data['status'] = 500;
