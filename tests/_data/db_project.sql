@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 24. Mai, 2021 10:18 AM
+-- Generation Time: 25. Mai, 2021 13:08 PM
 -- Tjener-versjon: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -245,6 +245,7 @@ INSERT INTO `order_state` (`id`, `state`) VALUES
 --
 
 CREATE TABLE `production_plan` (
+  `id` int(11) NOT NULL,
   `num_of_skies` int(11) NOT NULL,
   `ski_type` int(11) NOT NULL,
   `manager` int(11) DEFAULT NULL
@@ -254,9 +255,9 @@ CREATE TABLE `production_plan` (
 -- Dataark for tabell `production_plan`
 --
 
-INSERT INTO `production_plan` (`num_of_skies`, `ski_type`, `manager`) VALUES
-(200, 2, 1),
-(500, 1, 1);
+INSERT INTO `production_plan` (`id`, `num_of_skies`, `ski_type`, `manager`) VALUES
+(1, 200, 2, 1),
+(2, 500, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -611,7 +612,7 @@ ALTER TABLE `order_state`
 -- Indexes for table `production_plan`
 --
 ALTER TABLE `production_plan`
-  ADD PRIMARY KEY (`num_of_skies`,`ski_type`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `shipment`
@@ -724,6 +725,12 @@ ALTER TABLE `orders`
 --
 ALTER TABLE `order_state`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `production_plan`
+--
+ALTER TABLE `production_plan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `shipment`

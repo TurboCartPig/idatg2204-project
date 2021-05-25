@@ -166,10 +166,10 @@ CREATE TABLE IF NOT EXISTS db_project.teams_skier
 
 CREATE TABLE IF NOT EXISTS db_project.production_plan
 (
+    id           INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     num_of_skies INT NOT NULL,
     ski_type     INT NOT NULL REFERENCES ski_type (id) ON UPDATE CASCADE ON DELETE NO ACTION,
-    manager      INT REFERENCES employee (number) ON UPDATE CASCADE ON DELETE SET NULL,
-    PRIMARY KEY (num_of_skies, ski_type)
+    manager      INT REFERENCES employee (number) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 INSERT INTO `auth_token` (`token`)
