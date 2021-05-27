@@ -47,6 +47,14 @@ const DB_USER = 'user';
 const DB_PWD =  'password';
 ```
 
+## Creating a user
+<ul>
+<li>Open phpmyadmin</li>
+<li>Navigate to `User accounts`</li>
+<li>Press `Add user account`</li>
+<li>Fill in the credentials (name, password, etc..)</li>
+<li>Select the necessary priviliges (in most cases, this is limited to the `data` column)</li>
+</ul>
 # Setup
 
 This is a composer based project, so you need to have composer installed. You can find it [here](https://getcomposer.org).
