@@ -1,14 +1,6 @@
 # Project for IDATG2204
 
-The main focus so far have been to get crucial features up and running, we have implemented a wide variety of different endpoints to illustrate base functionality.
-
-
-So far the project lacks a few things:
-
-* Some endpoints are still not implemented
-* Tests have not been written yet
-* Code has not been modularized yet.
-* Error handling has not been implemented
+See the project report and wiki for more information.
 
 # Database setup
 You need to run the provided `initDB.sql` file to generate a new instance of the database of which this project utilizes.
@@ -31,7 +23,7 @@ An example of how the file structure would look like:
 The format of the file is as follows:
 ```phpregexp
 <?php
-const DB_HOST = '<your host, could be localhost or 127.0.0.0>';
+const DB_HOST = '<your host, could be localhost or 127.0.0.1>';
 const DB_NAME = '<name of the database, if you ran the initDB.sql file the db's name is "db_project"';
 const DB_USER = '<your db username>';
 const DB_PWD =  '<your db password>';
@@ -67,9 +59,6 @@ composer test
 ```
 # Endpoints
 A complete overview of all available endpoints can be found in the project wiki.
-# Deployment
-
-> TODO
 
 # Milestones:
 
