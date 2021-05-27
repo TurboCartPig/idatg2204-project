@@ -3,12 +3,14 @@
 See the project report and wiki for more information.
 
 # Database setup
+
 You need to run the provided `initDB.sql` file to generate a new instance of the database of which this project utilizes.
 
 One way of doing this is to simply copy/paste the entire file and paste it into the SQL field on phpMyAdmin and running it there.
 All necessary tables will be generated and filled with some initial data. 
 
 # DB credentials
+
 You need to provide your own db credentials file. This file should be placed in the `src/database` folder.
 
 An example of how the file structure would look like:
@@ -20,22 +22,31 @@ An example of how the file structure would look like:
 ├── README.md
 ├── initDB.sql
 ```
+
 The format of the file is as follows:
-```phpregexp
+```php
 <?php
 const DB_HOST = '<your host, could be localhost or 127.0.0.1>';
 const DB_NAME = '<name of the database, if you ran the initDB.sql file the db's name is "db_project"';
 const DB_USER = '<your db username>';
 const DB_PWD =  '<your db password>';
 ```
-Thus, if you want to (although it is not recommended), you could use the root user (given that you have not changed any settings regarding the login of the root user), an example of how this would look like:
-````phpregexp
+
+For this project we recommend that you have two user accounts for your database.
+1. The root user called `root` with the an empty password.
+2. A user account with permissions to manipulate the data in the database. You will have to create this one yourself, and fill in the credentials in the `dbCredentials.php` file.
+
+If you do change the password of the root user, or decide not to use it. You will have to update the codeception config, `codeception.yml` with the new credentials.
+
+Here is an example dbCredentials.php file, if you had a user account with name = "user" and password = "password":
+```php
 <?php
-const DB_HOST = '127.0.0.1';
+const DB_HOST = 'localhost';
 const DB_NAME = 'db_project';
-const DB_USER = 'root';
-const DB_PWD = '';
-````
+const DB_USER = 'user';
+const DB_PWD =  'password';
+```
+
 # Setup
 
 This is a composer based project, so you need to have composer installed. You can find it [here](https://getcomposer.org).
@@ -58,6 +69,7 @@ composer start
 composer test
 ```
 # Endpoints
+
 A complete overview of all available endpoints can be found in the project wiki.
 
 # Milestones:
