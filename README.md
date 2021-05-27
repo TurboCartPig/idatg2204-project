@@ -55,6 +55,7 @@ const DB_PWD =  'password';
 <li>Fill in the credentials (name, password, etc..)</li>
 <li>Select the necessary priviliges (in most cases, this is limited to the `data` column)</li>
 </ul>
+
 # Setup
 
 This is a composer based project, so you need to have composer installed. You can find it [here](https://getcomposer.org).
